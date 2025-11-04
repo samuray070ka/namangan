@@ -72,7 +72,7 @@ function Statistika() {
       num: 8.875,
       title: "project_cost",
       background: "#FFFFFF",
-    },
+    }
   ];
 
   return (
@@ -99,6 +99,11 @@ function Statistika() {
               <span>{t(item.title)}</span>
             </div>
           ))}
+
+          <div className="ijara">
+            <FaRegFolderOpen color="#6d5dd3" className="icon" />
+            <h2>{t('Ижара')}</h2>
+          </div>
         </div>
       </div>
     </div>

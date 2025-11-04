@@ -44,13 +44,15 @@ const Footer = () => {
             </p>
           </div>
         </div>
-
+      </div>
+    <hr className="for_hr" />
+    <div className="footer-overlay2">
         {/* Bottom */}
         <div className="footer-bottom">
           <p>© 2025 {t("footer_copyright_text")}</p>
           <p>{t("footer_follow_us")}</p>
         </div>
-      </div>
+    </div>
     </footer>
   );
 };

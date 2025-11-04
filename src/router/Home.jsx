@@ -70,6 +70,7 @@ function Home() {
 
         {/* === RESULT & STATISTIKA === */}
         <Result />
+        
         <Statistika />
 
         {/* === DISTRICTS (Tumanlar) === */}
@@ -97,7 +98,7 @@ function Home() {
 
 
 
-        {/* === ABOUT SECTION === */}
+       {/* === ABOUT SECTION === */}
         <div className="about">
           <div className="about_left">
             <h2 className="about_title">{t("about_title")}</h2>
@@ -108,6 +109,7 @@ function Home() {
               <button className="about_btn">{t("about_btn")}</button>
             </Link>
           </div>
+          <div className="about_border"></div>
 
           {/* === STATISTIKA BOXES === */}
           <div className="about_right">

@@ -47,7 +47,7 @@ function Navbar() {
 
   return (
     <div className="navbar">
-      <div className="nav_contanier">
+      <div className="container nav">
         {/* LOGO */}
         <div className="nav_logo">
           <Link to="/" className="link">
