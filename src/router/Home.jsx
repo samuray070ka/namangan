@@ -4,6 +4,7 @@ import "./Page.css";
 import Result from "../components/Result";
 import Statistika from "../components/Statistika";
 import { useLanguage } from "../context/LanguageContext"; // YANGI
+import {Link} from "react-router-dom"
 
 function Home() {
   const { t } = useLanguage(); // Tarjima funksiyasi
@@ -53,7 +54,9 @@ function Home() {
             <h3 className="about_subtitle">{t("about_subtitle")}</h3>
             <p className="about_code">{t("about_code")}</p>
             <p className="about_text">{t("about_text")}</p>
-            <button className="about_btn">{t("about_btn")}</button>
+            <Link className="link" to={'/about'}>
+              <button className="about_btn">{t("about_btn")}</button>
+            </Link>
           </div>
 
           {/* === STATISTIKA BOXES === */}
