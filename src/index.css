@@ -4,3 +4,13 @@
   box-sizing: border-box;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
+.container{
+  width: 1240px;
+  height: auto;
+  margin: auto;
+}
+@media screen and (max-width:1400px) {
+    .container{
+        width: 100%;
+    }
+}
