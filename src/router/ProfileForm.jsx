@@ -1,5 +1,5 @@
 import React from "react";
-import "../components/components.css";
+import "../components/Components.css";
 import { FiUploadCloud } from "react-icons/fi";
 
 function ProfileForm() {

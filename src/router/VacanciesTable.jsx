@@ -1,5 +1,5 @@
 import React from "react";
-import "../components/components.css";
+import "../components/Components.css";
 import { FiEdit2, FiTrash2 } from "react-icons/fi";
 import { TbEdit } from "react-icons/tb";
 
