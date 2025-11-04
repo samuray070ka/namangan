@@ -10,6 +10,7 @@ import ProfileForm from './router/ProfileForm';
 import VacanciesTable from "./router/VacanciesTable"
 import Unicorn from './router/Unicorn';
 import UnicPage from './router/UnicPage';
+import Contact from './router/Contact';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route path='/about' element={<ArticlePage/>}/>
           <Route path='/add' element={<ProfileForm/>}/>
           <Route path='/edit' element={<VacanciesTable/>}/>
+          <Route path='/contact' element={<Contact/>}/>
           <Route path='/:slog' element={<Unicorn/>}/>
           <Route path='/:slog/:id' element={<UnicPage/>}/>
         </Routes>
