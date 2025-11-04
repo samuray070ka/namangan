@@ -1,7 +1,7 @@
 // router/VacanciesTable.jsx
 import React from "react";
 import "../components/Components.css";
-import { FiEdit2, FiTrash2 } from "react-icons/fi";
+import { FiTrash2 } from "react-icons/fi";
 import { TbEdit } from "react-icons/tb";
 import { useLanguage } from "../context/LanguageContext"; // YANGI
 
