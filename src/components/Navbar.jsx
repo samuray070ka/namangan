@@ -6,29 +6,30 @@ import FlagEN from "../assets/photo_2025-11-04_15-34-09.jpg";
 import FlagUZ from "../assets/photo_2025-11-04_15-34-06.jpg";
 import FlagRU from "../assets/photo_2025-11-04_15-34-03.jpg";
 import { MdOutlineArrowDropDown } from "react-icons/md";
-import { useLanguage } from "../context/LanguageContext"; // YANGI
-import {Link} from "react-router-dom"
+import { FaBars } from "react-icons/fa"; // Hamburger qo'shildi
+import { useLanguage } from "../context/LanguageContext";
+import { Link } from "react-router-dom";
 
 function Navbar() {
-  const { language, setLanguage, t } = useLanguage(); // YANGI: Contextdan olamiz
-  const [open, setOpen] = useState(false);
+  const { language, setLanguage, t } = useLanguage();
+  const [open, setOpen] = useState(false); // Dropdown
+  const [menuOpen, setMenuOpen] = useState(false); // Mobile menu
   const dropdownRef = useRef(null);
 
-  // Barcha tillar
   const languages = [
     { code: "UZ", flag: FlagUZ },
     { code: "RU", flag: FlagRU },
     { code: "EN", flag: FlagEN },
   ];
 
-  const currentLang = languages.find((l) => l.code === language) || languages[1]; // Default: RU
+  const currentLang = languages.find((l) => l.code === language) || languages[1];
 
   const handleSelect = (code) => {
-    setLanguage(code); // Global til o'zgaradi
+    setLanguage(code);
     setOpen(false);
   };
 
-  // Click outside
+  // Dropdown tashqarida bosilganda yopish
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
@@ -39,34 +40,52 @@ function Navbar() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // Mobile menu yopilganda til o'zgarsa ham yangilansin
+  useEffect(() => {
+    // Til o'zgarganda mobile menu ochiq bo'lsa ham yangilansin
+  }, [language]);
+
   return (
     <div className="navbar">
       <div className="nav_contanier">
+        {/* LOGO */}
         <div className="nav_logo">
-          <Link className="link nav_logo" to={'/'}>
+          <Link to="/" className="link">
             <img src={Logo} alt="Logo" />
           </Link>
         </div>
-        <div className="nav_center">
+
+        {/* CENTER LINKS (Desktop + Mobile) */}
+        <div className={`nav_center ${menuOpen ? "open" : ""}`}>
           <ul className="nav_center_ul">
-            <Link className="link" to={'/'}>
-              <li>{t("nav_home")}</li>
-            </Link>
-            <Link className="link" to={'/about'}>
-              <li>{t("nav_about")}</li>
-            </Link>
-            <Link className="link" to={'/contact'}>
-              <li>{t("nav_contact")}</li>
-            </Link>
+            <li>
+              <Link to="/" className="link" onClick={() => setMenuOpen(false)}>
+                {t("nav_home")}
+              </Link>
+            </li>
+            <li>
+              <Link to="/about" className="link" onClick={() => setMenuOpen(false)}>
+                {t("nav_about")}
+              </Link>
+            </li>
+            <li>
+              <Link to="/contact" className="link" onClick={() => setMenuOpen(false)}>
+                {t("nav_contact")}
+              </Link>
+            </li>
           </ul>
         </div>
+
+<div className="nav_icon">
+
+        {/* LANGUAGE DROPDOWN */}
         <div className="nav_lan" ref={dropdownRef}>
           <div className="lang-selector" onClick={() => setOpen(!open)}>
             <img src={currentLang.flag} alt={language} className="flag-icon" />
             <span className="lang-code">{language}</span>
-            <span className={`arrow ${open ? "open" : ""}`}>
-              <MdOutlineArrowDropDown className="arrow_i" />
-            </span>
+            <MdOutlineArrowDropDown
+              className={`arrow_i ${open ? "open" : ""}`}
+            />
           </div>
 
           {open && (
@@ -86,6 +105,15 @@ function Navbar() {
             </div>
           )}
         </div>
+
+        {/* HAMBURGER BUTTON (Mobile only) */}
+        <div
+          className="nav_bars"
+          onClick={() => setMenuOpen(!menuOpen)}
+        >
+          <FaBars />
+        </div>
+</div>
       </div>
     </div>
   );

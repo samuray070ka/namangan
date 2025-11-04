@@ -36,6 +36,9 @@ const translations = {
       stat_communication: "Коммуникациялар тайёрлиги",
       stat_zones: "Саноат зоналари",
       stat_rent: "Ижарасиз ижара",
+      add_company: "Saqlash",
+      save_data: "Saqlash",
+      cancel: "Bekor qilish",
   
       // === RESULT PAGE ===
       result_title: "Иқтисодий фаолият кўрсаткичлари",
@@ -159,6 +162,9 @@ const translations = {
       stat_communication: "Готовность коммуникаций",
       stat_zones: "Промышленных зон",
       stat_rent: "Аренда без надбавок",
+      add_company: "Сохранить",
+      save_data: "Сохранить",
+      cancel: "Отмена",
   
       result_title: "Показатели экономической деятельности",
       edit_data: "Изменить данные",
@@ -275,6 +281,10 @@ const translations = {
       stat_communication: "Communication Readiness",
       stat_zones: "Industrial Zones",
       stat_rent: "Rent Without Markup",
+      add_company: "Save",
+      save_data: "Save",
+      cancel: "Cancel",
+      
   
       result_title: "Economic Activity Indicators",
       edit_data: "Edit Data",

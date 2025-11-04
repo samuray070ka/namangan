@@ -7,6 +7,7 @@ const ArticlePage = () => {
   const { t } = useLanguage(); // Tarjima funksiyasi
 
   return (
+    <div className="container">
     <div className="article-container">
       <h2 className="article-title">{t("article_title")}</h2>
 
@@ -21,6 +22,7 @@ const ArticlePage = () => {
         <p>{t("article_p8")}</p>
         <p>{t("article_p9")}</p>
       </div>
+    </div>
     </div>
   );
 };
