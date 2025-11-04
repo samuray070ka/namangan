@@ -1,8 +1,12 @@
+// router/ProfileForm.jsx
 import React from "react";
 import "../components/Components.css";
 import { FiUploadCloud } from "react-icons/fi";
+import { useLanguage } from "../context/LanguageContext"; // YANGI
 
 function ProfileForm() {
+  const { t } = useLanguage(); // Tarjima funksiyasi
+
   return (
     <div className="profile-page">
       {/* === FOTO QISMI === */}
@@ -10,124 +14,129 @@ function ProfileForm() {
         <div className="photo-box">
           <FiUploadCloud className="upload-icon" />
           <p className="upload-text">
-            Нажмите что бы загрузить свои <br /> рисунки
+            {t("upload_click_text").split("<br />").map((line, i) => (
+              <React.Fragment key={i}>
+                {line}
+                {i < t("upload_click_text").split("<br />").length - 1 && <br />}
+              </React.Fragment>
+            ))}
           </p>
-          <span className="upload-types">Jpg, Png, Svg.</span>
-          <button className="upload-btn">Загрузить фото</button>
+          <span className="upload-types">{t("upload_types")}</span>
+          <button className="upload-btn">{t("upload_button")}</button>
         </div>
 
-        <button className="edit1-btn">Изменить данные</button>
+        <button className="edit1-btn">{t("edit_data")}</button>
       </div>
 
       {/* === FORMA QISMI === */}
       <div className="form-section">
-        <h3>Umumiy ma’lumot</h3>
+        <h3>{t("general_info")}</h3>
 
         <div className="form-grid">
           <div className="form-item">
-            <label>Korxona nomi</label>
-            <input type="text" placeholder="UI/UX Designer" />
+            <label>{t("company_name")}</label>
+            <input type="text" placeholder={t("company_name_ph")} />
           </div>
           <div className="form-item">
-            <label>Ish urini</label>
-            <input type="text" placeholder="UI/UX Designer" />
-          </div>
-
-          <div className="form-item">
-            <label>Ism</label>
-            <input type="text" placeholder="Erkak" />
-          </div>
-          <div className="form-item">
-            <label>Ishtirokni ma’lum olgan sana</label>
-            <input type="text" placeholder="Erkak" />
+            <label>{t("workplace")}</label>
+            <input type="text" placeholder={t("workplace_ph")} />
           </div>
 
           <div className="form-item">
-            <label>Loyiha tarmogi</label>
-            <input type="text" placeholder="Erkak" />
+            <label>{t("name")}</label>
+            <input type="text" placeholder={t("name_ph")} />
           </div>
           <div className="form-item">
-            <label>Loyiha yashash muddati</label>
-            <input type="text" placeholder="Erkak" />
-          </div>
-
-          <div className="form-item">
-            <label>Loyiha tashabbuskori ismi</label>
-            <input type="text" placeholder="Erkak" />
-          </div>
-          <div className="form-item">
-            <label>Loyiha holati</label>
-            <input type="text" placeholder="Erkak" />
+            <label>{t("participation_date")}</label>
+            <input type="text" placeholder={t("participation_date_ph")} />
           </div>
 
           <div className="form-item">
-            <label>Er maydoni</label>
-            <input type="text" placeholder="Erkak" />
+            <label>{t("project_branch")}</label>
+            <input type="text" placeholder={t("project_branch_ph")} />
           </div>
           <div className="form-item">
-            <label>Mavjud bo‘sh ish o‘rinlari</label>
-            <input type="text" placeholder="Erkak" />
+            <label>{t("project_duration")}</label>
+            <input type="text" placeholder={t("project_duration_ph")} />
           </div>
 
           <div className="form-item">
-            <label>Ajratilgan lotlar soni</label>
-            <input type="text" placeholder="Erkak" />
+            <label>{t("initiator_name")}</label>
+            <input type="text" placeholder={t("initiator_name_ph")} />
           </div>
           <div className="form-item">
-            <label>Telefon raqam</label>
-            <input type="text" placeholder="Erkak" />
+            <label>{t("project_status")}</label>
+            <input type="text" placeholder={t("project_status_ph")} />
+          </div>
+
+          <div className="form-item">
+            <label>{t("land_area")}</label>
+            <input type="text" placeholder={t("land_area_ph")} />
+          </div>
+          <div className="form-item">
+            <label>{t("vacant_jobs")}</label>
+            <input type="text" placeholder={t("vacant_jobs_ph")} />
+          </div>
+
+          <div className="form-item">
+            <label>{t("allocated_lots")}</label>
+            <input type="text" placeholder={t("allocated_lots_ph")} />
+          </div>
+          <div className="form-item">
+            <label>{t("phone_number")}</label>
+            <input type="text" placeholder={t("phone_number_ph")} />
           </div>
         </div>
 
         {/* === Pastdagi bloklar === */}
         <div className="form-section-bottom">
           <div className="bottom-box">
-            <h4>Ishlab chiqarish quvvati</h4>
+            <h4>{t("production_capacity")}</h4>
             <div className="double-inputs">
               <div>
-                <label>Reja</label>
-                <input type="text" placeholder="AA" />
+                <label>{t("plan")}</label>
+                <input type="text" placeholder={t("plan_ph")} />
               </div>
               <div>
-                <label>Amalda</label>
-                <input type="text" placeholder="AA" />
+                <label>{t("actual")}</label>
+                <input type="text" placeholder={t("actual_ph")} />
               </div>
             </div>
           </div>
 
           <div className="bottom-box">
-            <h4>Loyiha umumiy qiymati</h4>
+            <h4>{t("total_project_cost")}</h4>
             <div className="quad-inputs">
-              <input type="text" placeholder="O‘z mablag‘i" />
-              <input type="text" placeholder="Bank krediti" />
-              <input type="text" placeholder="Xorijiy mablag‘ ($)" />
+              <input type="text" placeholder={t("own_funds_ph")} />
+              <input type="text" placeholder={t("bank_loan_ph")} />
+              <input type="text" placeholder={t("foreign_funds_ph")} />
             </div>
           </div>
 
           <div className="bottom-box">
-            <h4>Eksport qiymati</h4>
+            <h4>{t("export_value")}</h4>
             <div className="double-inputs">
               <div>
-                <label>Reja</label>
-                <input type="text" placeholder="AA" />
+                <label>{t("plan")}</label>
+                <input type="text" placeholder={t("plan_ph")} />
               </div>
               <div>
-                <label>Amalda</label>
-                <input type="text" placeholder="AA" />
+                <label>{t("actual")}</label>
+                <input type="text" placeholder={t("actual_ph")} />
               </div>
             </div>
           </div>
 
           <div className="bottom-box">
-            <h4>O‘zlashtirilgan mablag‘</h4>
+            <h4>{t("allocated_funds")}</h4>
             <div className="double-inputs">
               <div>
-                <label>Reja</label>
-                <input type="text" placeholder="AA" />
+                <label>{t("plan")}</label>
+                <input type="text" placeholder={t("plan_ph")} />
               </div>
               <div>
-                <label>Amalda</label>
-                <input type="text" placeholder="AA" />
+                <label>{t("actual")}</label>
+                <input type="text" placeholder={t("actual_ph")} />
               </div>
             </div>
           </div>

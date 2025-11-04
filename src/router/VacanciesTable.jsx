@@ -1,57 +1,49 @@
+// router/VacanciesTable.jsx
 import React from "react";
 import "../components/Components.css";
 import { FiEdit2, FiTrash2 } from "react-icons/fi";
 import { TbEdit } from "react-icons/tb";
+import { useLanguage } from "../context/LanguageContext"; // YANGI
 
 const VacanciesTable = () => {
+  const { t } = useLanguage(); // Tarjima funksiyasi
+
   const data = [
     {
       id: 1,
-      name: "Полимикширо МЧЖ",
+      name: "vacancy_company_1",
       rows: [
-        { title: "Полимикширо МЧЖ", count: "", phone: "+99895 2247 22 22" },
-        { title: "Пайпок ишлаб чиқариш", count: "10", phone: "" },
-        { title: "Ойлик иш ҳақи", count: "1 000 000", phone: "" },
-        {
-          title: "Қулайликлар",
-          count: "автотранспорт харажатлари тўлаб қўй",
-          phone: "",
-        },
+        { title: "company_name", count: "", phone: "+99895 2247 22 22" },
+        { title: "vacancy_position", count: "10", phone: "" },
+        { title: "monthly_salary", count: "1 000 000", phone: "" },
+        { title: "benefits", count: "transport_expenses_covered", phone: "" },
       ],
     },
     {
       id: 2,
-      name: "Полимикширо МЧЖ",
+      name: "vacancy_company_2",
       rows: [
-        { title: "Полимикширо МЧЖ", count: "", phone: "+99895 2247 22 22" },
-        { title: "Пайпок ишлаб чиқариш", count: "10", phone: "" },
-        { title: "Ойлик иш ҳақи", count: "1 000 000", phone: "" },
-        {
-          title: "Қулайликлар",
-          count: "автотранспорт харажатлари тўлаб қўй",
-          phone: "",
-        },
+        { title: "company_name", count: "", phone: "+99895 2247 22 22" },
+        { title: "vacancy_position", count: "10", phone: "" },
+        { title: "monthly_salary", count: "1 000 000", phone: "" },
+        { title: "benefits", count: "transport_expenses_covered", phone: "" },
       ],
     },
     {
       id: 3,
-      name: "Полимикширо МЧЖ",
+      name: "vacancy_company_3",
       rows: [
-        { title: "Полимикширо МЧЖ", count: "", phone: "+99895 2247 22 22" },
-        { title: "Пайпок ишлаб чиқариш", count: "10", phone: "" },
-        { title: "Ойлик иш ҳақи", count: "1 000 000", phone: "" },
-        {
-          title: "Қулайликлар",
-          count: "автотранспорт харажатлари тўлаб қўй",
-          phone: "",
-        },
+        { title: "company_name", count: "", phone: "+99895 2247 22 22" },
+        { title: "vacancy_position", count: "10", phone: "" },
+        { title: "monthly_salary", count: "1 000 000", phone: "" },
+        { title: "benefits", count: "transport_expenses_covered", phone: "" },
       ],
     },
   ];
 
   return (
     <div className="vacancies-section">
-      <h3 className="vacancy-header">Мавжуд бўш иш ўринлари</h3>
+      <h3 className="vacancy-header">{t("vacancies_title")}</h3>
 
       <div className="vacancy-scroll">
         {data.map((item) => (
@@ -59,34 +51,34 @@ const VacanciesTable = () => {
             <table className="vacancy-table">
               <thead>
                 <tr>
-                  <th>МЧЖ номи</th>
-                  <th>Сони</th>
-                  <th>Тел</th>
+                  <th>{t("table_company")}</th>
+                  <th>{t("table_count")}</th>
+                  <th>{t("table_phone")}</th>
                 </tr>
               </thead>
               <tbody>
                 {item.rows.map((row, i) => (
                   <tr key={i}>
-                    <td>{row.title}</td>
-                    <td>{row.count}</td>
-                    <td>{row.phone}</td>
+                    <td>{t(row.title)}</td>
+                    <td>{row.count || t(row.count)}</td>
+                    <td>{row.phone || "-"}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
 
             <div className="table-actions">
-              <TbEdit className="edit-btn" />
-              <FiTrash2 className="delete-btn" />  
+              <TbEdit className="edit-btn" title={t("edit")} />
+              <FiTrash2 className="delete-btn" title={t("delete")} />
             </div>
           </div>
         ))}
 
         <div className="table-pagination">
-          <span>1 of 28</span>
+          <span>{t("pagination_info")}</span>
           <div className="pagination-controls">
-            <button>{"<"}</button>
-            <button>{">"}</button>
+            <button aria-label={t("prev_page")}>{"<"}</button>
+            <button aria-label={t("next_page")}>{">"}</button>
           </div>
         </div>
       </div>

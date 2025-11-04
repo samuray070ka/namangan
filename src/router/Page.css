@@ -307,7 +307,7 @@
     justify-content: space-between;
 }
 .result_box{
-    width: 400px;
+    width: 360px;
     height: 242.1px;
     border-radius: 18.39px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.147);
@@ -364,8 +364,8 @@
 }
 .swiper_h1{
     text-align: center;
-    font-size: 64px;
-    font-weight: 500;
+    font-size: 40px;
+    font-weight: 600;
 }
 .swiper_slide{
     width: 98%;
@@ -780,8 +780,6 @@
   .result_card span {
     font-size: 14px;
   }
-  .result_bottom{
-}
 .result_cards{
     justify-content: space-evenly;
   }
@@ -811,12 +809,12 @@
     justify-content: space-between;
     align-items: flex-start;
     background-color: #f8fbfd;
-    padding: 60px 80px;
-    border-right: 1px solid #e1e4e8;
-    font-family: "Inter", sans-serif;
+    /* border-right: 1px solid #e1e4e8; */
     margin: auto;
     gap: 40px;
     box-sizing: border-box;
+    margin-top: 100px;
+    margin-bottom: 100px;
   }
   
   /* ===== LEFT SIDE ===== */
@@ -878,11 +876,13 @@
   /* ===== RIGHT SIDE ===== */
   .about_right {
     flex: 1;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 25px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 20px;
     justify-items: center;
     padding-top: 60px;
+    padding-left: 100px;
   }
   
   .about_box {
@@ -1030,5 +1030,50 @@
     .about_btn {
       width: 100%;
       font-size: 14px;
+    }
+  }
+  @media screen and (max-width:470px) {
+    .about_right{
+      padding-left: 50px;
+    }
+  }
+  @media screen and (max-width:425px) {
+    .about_right{
+      padding-left: 25px;
+    }
+  }
+  @media screen and (max-width:400px) {
+    .about_right{
+      padding-left: 40px;
+    }
+  }
+  @media screen and (max-width:550px) {
+    .about_right{
+      padding-left: 75px;
+    }
+  }
+  @media screen and (max-width:500px) {
+    .about_right{
+      padding-left: 60px;
+    }
+  }
+   @media screen and (max-width:450px) {
+    .about_right{
+      padding-left: 30px;
+    }
+  }
+  @media screen and (max-width:425px) {
+    .about_right{
+      padding-left: 20px;
+    }
+  }
+  @media screen and (max-width:410px) {
+    .about_right{
+      padding-left: 10px;
+    }
+  }
+  @media screen and (max-width:400px) {
+    .about_right{
+      padding-left: 40px;
     }
   }

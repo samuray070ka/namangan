@@ -4,6 +4,11 @@
   box-sizing: border-box;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
+body{
+  width: 100%;
+  min-height: 100vh;
+  background-color: #f7fafc;
+}
 .container{
   width: 1240px;
   height: auto;
@@ -12,5 +17,10 @@
 @media screen and (max-width:1400px) {
     .container{
         width: 100%;
+        padding: 0 10px;
     }
+}
+.link{
+  text-decoration: none;
+  color: rgba(24, 38, 64, 1);
 }
