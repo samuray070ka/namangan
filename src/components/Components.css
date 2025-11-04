@@ -1341,64 +1341,235 @@
 
 
 
-.modal-overlay {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100vw; height: 100vh;
-  background: rgba(0, 0, 0, 0.6);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-}
+/* ============================= */
+/* 📱 Responsive Design for VacanciesTable */
+/* ============================= */
 
-.modal-content {
-  background: white;
-  border-radius: 12px;
-  width: 90%;
-  max-width: 1000px;
-  max-height: 90vh;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-}
+/* 1200px dan kichik ekranlar (desktop kichrayganda) */
+@media (max-width: 1200px) {
+  .vacancies-section {
+    padding: 0 15px;
+  }
 
-.modal-header {
-  padding: 15px 20px;
-  border-bottom: 1px solid #eee;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
+  .vacancy-table th,
+  .vacancy-table td {
+    font-size: 15px;
+    padding: 8px;
+  }
 
-.modal-close {
-  color: #999;
-}
+  .modal-content {
+    max-width: 900px;
+    width: 90%;
+  }
 
-.modal-close:hover {
-  color: #000;
-}
-
-.modal-buttons {
-  padding: 15px 20px;
-  border-top: 1px solid #eee;
-  background: #f9f9f9;
-}
-
-.form-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  padding: 0 10px;
-}
-
-@media (max-width: 768px) {
   .form-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
   }
 }
 
+/* 992px dan kichik — planshet */
+@media (max-width: 992px) {
+  .vacancy-table {
+    font-size: 14px;
+  }
+
+  .vacancy-box {
+    overflow-x: auto;
+  }
+
+  .vacancy-table th,
+  .vacancy-table td {
+    padding: 6px 10px;
+  }
+
+  .modal-content {
+    width: 95%;
+    max-width: 700px;
+    padding: 15px;
+  }
+
+  .photo-box {
+    height: 200px;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .modal-buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .modal-buttons button {
+    width: 100%;
+    height: 45px;
+    font-size: 15px;
+  }
+}
+
+/* 768px dan kichik — katta telefonlar va kichik planshetlar */
+@media (max-width: 768px) {
+  .vacancies-section {
+    padding: 10px;
+  }
+
+  .vacancy-header {
+    font-size: 20px;
+    text-align: center;
+  }
+
+  .vacancy-table th,
+  .vacancy-table td {
+    font-size: 13px;
+    padding: 6px;
+  }
+
+  .table-actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 8px;
+  }
+
+  .modal-content {
+    width: 95%;
+    max-height: 85vh;
+    border-radius: 10px;
+    padding: 10px;
+  }
+
+  .photo-box {
+    height: 180px;
+  }
+
+  .preview-image {
+    max-height: 150px;
+  }
+
+  .modal-header h3 {
+    font-size: 18px;
+  }
+
+  .form-section {
+    padding: 0 5px;
+  }
+
+  .bottom-box h4 {
+    font-size: 15px;
+  }
+}
+
+/* 576px dan kichik — telefon */
+@media (max-width: 576px) {
+  .vacancy-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .vacancy-scroll {
+    padding-bottom: 10px;
+  }
+
+  .vacancy-box {
+    margin-bottom: 20px;
+  }
+
+  .modal-overlay {
+    align-items: flex-start;
+    padding-top: 40px;
+  }
+
+  .modal-content {
+    width: 95%;
+    height: auto;
+    max-height: 90vh;
+    padding: 10px;
+  }
+
+  .photo-box {
+    height: 160px;
+  }
+
+  .modal-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+
+  .modal-header h3 {
+    font-size: 16px;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .form-item label {
+    font-size: 13px;
+  }
+
+  .form-item input {
+    font-size: 14px;
+    height: 35px;
+  }
+
+  .modal-buttons {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .modal-buttons button {
+    width: 100%;
+    font-size: 14px;
+    height: 42px;
+  }
+
+  .pagination-controls button {
+    width: 30px;
+    height: 30px;
+    font-size: 14px;
+  }
+}
+
+/* Juda kichik telefonlar (max-width: 400px) */
+@media (max-width: 400px) {
+  .vacancy-header {
+    font-size: 18px;
+  }
+
+  .modal-content {
+    width: 95%;
+    padding: 8px;
+  }
+
+  .modal-header h3 {
+    font-size: 15px;
+  }
+
+  .modal-buttons button {
+    font-size: 13px;
+    height: 40px;
+  }
+
+  .form-item input {
+    font-size: 13px;
+  }
+
+  .photo-box {
+    height: 140px;
+  }
+
+  .preview-image {
+    max-height: 120px;
+  }
+}
+
+/* ============================= */
+/* 📱 End Responsive Design       */
+/* ============================= */
 
 /* ============================= */
 /* NAVBAR ASOSIY STIL */

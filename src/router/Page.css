@@ -1545,6 +1545,7 @@ label input {
   flex-direction: row;
 }
 
+
 .swiper_text h2 {
   font-size: 32px;
   color: rgba(51, 51, 51, 1);
@@ -1689,4 +1690,27 @@ label input {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+@media screen and (max-width: 768px) {
+  .swiper_slide {
+    height: auto;
+  }
+  .swiper_h1 {
+    font-size: 32px;
+    font-weight: 500;
+  }
+  .swiper_text h2,
+  .swiper_text h6 {
+    text-align: center;
+    font-size: 24px;
+  }
+  .swiper_text h6 {
+    font-size: 16px;
+    margin: 20px 0;
+  }
+  .unicorn_slide {
+    flex-direction: column;
+    gap: 20px;
+  }
 }
