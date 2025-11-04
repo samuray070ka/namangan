@@ -6,6 +6,7 @@ import "../router/Page.css";
 import { useLanguage } from "../context/LanguageContext"; // YANGI
 import { BiEdit } from "react-icons/bi";
 import { FaUnlock } from "react-icons/fa";
+import {Link} from "react-router-dom"
 
 function Result() {
   const { t } = useLanguage(); // Tarjima funksiyasi
@@ -74,10 +75,12 @@ function Result() {
       <div className="result">
         <div className="result_top">
           <h1 className="result_top_h1">{t("result_title")}</h1>
+          <Link className="link" to={'/edit'}>
           <button className="result_top_btn1">
             <BiEdit className="res_icon" />
             {t("edit_data")}
           </button>
+          </Link>
           <button className="result_top_btn2">
            <FaUnlock className="res_icon2" />
           </button>
