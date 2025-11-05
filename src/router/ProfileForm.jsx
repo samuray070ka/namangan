@@ -3,6 +3,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from "axios";
 import { FiUploadCloud } from "react-icons/fi";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import { FiEdit } from "react-icons/fi";
+
 
 // Images
 import DefoultImg from '../assets/rayon__img.png';
@@ -173,11 +175,11 @@ const handleDelete = async (id) => {
 
                     <div className="swiper_actions" style={{ marginTop: "10px", display: "flex", gap: "10px" }}>
                       <button onClick={() => openModal(item)} className="edit-btn">
-                        Tahrirlash
+                        <FiEdit className='btn_f_edit' style={{cursor:"pointer"}}/>
                       </button>
                       <RiDeleteBin6Line
                         onClick={() => handleDelete(item._id)}
-                        style={{ cursor: "pointer", color: "#e74c3c", fontSize: "20px" }}
+                        style={{ cursor: "pointer", color: "#e74c3c", fontSize: "25px" }}
                       />
                     </div>
                   </div>

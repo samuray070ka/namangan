@@ -22,13 +22,19 @@ function Result() {
   const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
-    const checkAdmin = () => {
-      const status = localStorage.getItem("isAdmin");
-      setIsAdmin(status === "true");
-    };
-    checkAdmin();
-    const interval = setInterval(checkAdmin, 500);
-    return () => clearInterval(interval);
+    // Sahifa yuklanganda faqat login qilingan bo'lsa tekshir
+    const savedCredentials = localStorage.getItem("userCredentials");
+    if (savedCredentials) {
+      const { email, password } = JSON.parse(savedCredentials);
+      if (email === "admin@gmail.com" && password === "admin") {
+        setIsAdmin(true);
+      } else {
+        setIsAdmin(false);
+      }
+    } else {
+      setIsAdmin(false); // Agar hech kim login qilmagan bo'lsa
+    }
+    // interval o'chirildi — keraksiz
   }, []);
 
   const handleInputChange = (e) => {
@@ -45,19 +51,17 @@ function Result() {
 
     const { email, password } = formData;
 
-    if (  email === "admin@gmail.com" && password === "admin") {
-      localStorage.setItem("userCredentials", JSON.stringify(formData));
-      localStorage.setItem("isAdmin", "true");
+    // Admin tekshiruvi
+    const admin = email === "admin@gmail.com" && password === "admin";
 
-      setMessage("Hush kelibsiz!");
-      setMessageType("success");
-    } else {
-      localStorage.setItem("userCredentials", JSON.stringify(formData));
-      localStorage.setItem("isAdmin", "false");
+    // Har doim saqlaymiz, lekin isAdmin faqat admin bo'lsa true
+    localStorage.setItem("userCredentials", JSON.stringify(formData));
+    localStorage.setItem("isAdmin", admin ? "true" : "false");
 
-      setMessage("Siz admin emassiz!");
-      setMessageType("error");
-    }
+    setIsAdmin(admin); // State yangilanadi
+
+    setMessage(admin ? "Hush kelibsiz!" : "Siz admin emassiz!");
+    setMessageType(admin ? "success" : "error");
 
     // 2 soniyadan keyin yopiladi
     setTimeout(() => {
@@ -201,7 +205,6 @@ function Result() {
                   placeholder={t("enter password") || "Parolni kiriting"}
                 />
               </div>
-
 
               {/* BUTTONDA "Tekshirilmoqda..." */}
               <button
