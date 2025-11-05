@@ -23,8 +23,8 @@ function App() {
           <Route path='/add' element={<ProfileForm/>}/>
           <Route path='/edit' element={<VacanciesTable/>}/>
           <Route path='/contact' element={<Contact/>}/>
-          <Route path='/:slog' element={<Unicorn/>}/>
-          <Route path='/:slog/:id' element={<UnicPage/>}/>
+          <Route path='/:slug' element={<Unicorn/>}/>
+          <Route path='/:slug/:slug_slug' element={<UnicPage/>}/>
         </Routes>
         <Footer/>
       </div>

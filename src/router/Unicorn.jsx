@@ -1,118 +1,70 @@
-import React, { useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
-
-// Images
-import DefoultImg from '../assets/rayon__img.png'
-
-// Icons
-import { FaRegImage } from "react-icons/fa6";
-import { RiDeleteBin6Line } from "react-icons/ri";
-import { FiUploadCloud } from 'react-icons/fi';
-import { IoClose } from "react-icons/io5";
+import React, {useState} from 'react';
+import { Link } from 'react-router-dom';
 
 // Components
+import "../components/Map.css";
+import mapImage from "../assets/123.svg"; // assets ga rasmni joylashtiring
+import { IoLocationOutline } from "react-icons/io5";
 import Result from '../components/Result';
 import Statistika from '../components/Statistika';
 
 const Unicorn = () => {
-    const [modal, setModal] = useState(false)
-    const { slog } = useParams();
+  const [hovered, setHovered] = useState(null);
+    const districts = [
+      { id: 1, name: "Pop", slog: "pop", slug_in:"pop_slug", },
+      { id: 2, name: "Chust", slog: "chust", slug_in:"chust_slug", },
+      { id: 3, name: "Kosonsoy", slog: "kosonsoy", slug_in:"kosonsoy_slug", },
+      { id: 4, name: "Turakurg'on", slog: "turakurgon", slug_in:"turakurgon_slug", },
+      { id: 5, name: "Namangan tuman", slog: "namangan-tuman", slug_in:"namangan-tuman_slug", },
+      { id: 6, name: "Minbuloq", slog: "minbuloq", slug_in:"minbuloq_slug", },
+      { id: 7, name: "Davlatobod", slog: "davlatobod", slug_in:"davlatobod_slug", },
+      { id: 8, name: "Yangiqoʻrgʻon", slog: "yangiqorgon", slug_in:"yangiqorgon_slug", },
+      { id: 9, name: "Namangan sh", slog: "namangan-sh", slug_in:"namangan-sh_slug", },
+      { id: 10, name: "Yangi Namangan", slog: "yangi-namangan", slug_in:"yangi-namangan_slug", },
+      { id: 11, name: "Chortoq", slog: "chortoq", slug_in:"chortoq_slug", },
+      { id: 12, name: "Uchqoʻrgʻon", slog: "uchqorgon", slug_in:"uchqorgon_slug", },
+      { id: 13, name: "Uychi", slog: "uychi", slug_in:"uychi_slug", },
+      { id: 14, name: "Norin", slog: "norin", slug_in:"norin_slug", }
+    ];
 
-    // ✅ useState bilan boshqariladigan ro'yxat
-    const [tumanlar, setTumanlar] = useState([
-        { slog: "slog1", id: 1, title: "Поп миршикори мчж", desc: "Дата изменения | 18:37", image: DefoultImg, icon: FaRegImage, del__icon: RiDeleteBin6Line },
-        { slog: "slog2", id: 2, title: "Поп миршикори мчж", desc: "Дата изменения | 18:37", image: DefoultImg, icon: FaRegImage, del__icon: RiDeleteBin6Line },
-        { slog: "slog3", id: 3, title: "Поп миршикори мчж", desc: "Дата изменения | 18:37", image: DefoultImg, icon: FaRegImage, del__icon: RiDeleteBin6Line },
-        { slog: "slog4", id: 4, title: "Поп миршикори мчж", desc: "Дата изменения | 18:37", image: DefoultImg, icon: FaRegImage, del__icon: RiDeleteBin6Line },
-        { slog: "slog5", id: 5, title: "Поп миршикори мчж", desc: "Дата изменения | 18:37", image: DefoultImg, icon: FaRegImage, del__icon: RiDeleteBin6Line },
-        { slog: "slog6", id: 6, title: "Поп миршикори мчж", desc: "Дата изменения | 18:37", image: DefoultImg, icon: FaRegImage, del__icon: RiDeleteBin6Line }
-    ]);
+  // Agar kerak bo‘lsa, slog ni tekshirish uchun quyidagi kod ishlaydi:
+  // console.log("District slug:", slog);
 
-    // ✅ Ma'lumotni o'chirish funksiyasi - TO'G'RI VERSIYA
-    const handleDelete = (id) => {
-        // Yangi ro'yxat yaratamiz (o'chirilayotgan id dan tashqari)
-        const updatedTumanlar = tumanlar.filter(item => item.id !== id);
+  return (
+    <div className="container">
+      {/* Yuqoridagi bo‘limlar */}
+      <Result />
+      <Statistika />
 
-        // State ni yangilaymiz
-        setTumanlar(updatedTumanlar);
-    };
+      {/* Xarita bo‘limi */}
+          <div className="map-wrapper">
+      <div className="map-container">
+        <img src={mapImage} alt="Namangan map" className="map-image" />
 
-    const tuman = tumanlar.find(item => item.slog === slog);
+        {districts.map((d, idx) => (
+            <Link
+            key={d.id}
+            to={`/${d.slog}/${d.slug_in}`}
+            className={`district ${hovered === d.id ? "active" : ""}`}
+            onMouseEnter={() => setHovered(d.id)}
+            onMouseLeave={() => setHovered(null)}
+            style={{
+                opacity: hovered && hovered !== d.id ? 0.35 : 1,
+                transform: hovered === d.id ? "translateY(-6px) scale(1.08)" : "none"
+            }}
+            >
+                <div className="d1">
 
-    if (!tuman) {
-        return (
-            <div className="tuman-detail">
-                <h2>Tuman topilmadi</h2>
-                <Link to="/">← Ortga qaytish</Link>
-            </div>
-        );
-    }
-
-    return (
-        <div className="container">
-            <Result />
-            <Statistika />
-            <div className='swiper_all'>
-                <h1 className='swiper_h1'>Районлар</h1>
-                <div className="swiper">
-                    {tumanlar.length > 0 ? (
-                        tumanlar.map((item, index) => (
-                            <div key={item.id} className='swiper_slide'>
-                                <div className='swiper_hr'></div>
-                                <div className='swiper_flex unicorn_slide'>
-                                    <Link to={`/${item.slog}/${item.id}`} className='link'>
-                                        <div className="swiper_text">
-                                            <h2>{item.title}</h2>
-                                            <h6>{item.desc}</h6>
-                                        </div>
-                                    </Link>
-                                    <div className="swiper_edit">
-                                        <div className="swiper_edit-img">
-                                            <img
-                                                src={item.image}
-                                                onClick={() => setModal(!modal)}
-                                                alt="rayon"
-                                            />
-                                            <div className="swiper_edit-icon">
-                                                <item.icon className='img-icon' />
-                                            </div>
-                                        </div>
-                                        <div className="swiper_del-icon">
-                                            <item.del__icon
-                                                className='del-icon'
-                                                onClick={() => handleDelete(item.id)}
-                                                style={{ cursor: "pointer" }}
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        ))
-                    ) : (
-                        <div className="empty-state">
-                            <p>Hech qanday tuman qolmadi</p>
-                        </div>
-                    )}
-
-                    {modal && (
-                        <div className="modal">
-                            <div className="photo-section">
-                                <div className="photo-box">
-                                    <IoClose className='close-btn' onClick={() => setModal(!modal)} />
-                                    <FiUploadCloud className="upload-icon" />
-                                    <p className="upload-text">
-                                        Нажмите что бы загрузить свои <br /> рисунки
-                                    </p>
-                                    <span className="upload-types">Jpg, Png, Svg.</span>
-                                    <button className="upload-btn">Загрузить фото</button>
-                                </div>
-                            </div>
-                        </div>
-                    )}
+            <IoLocationOutline  className="icon"/>
+            <span className="district-text">{d.name}</span>
                 </div>
-            </div>
-        </div>
-    );
+          </Link>
+        ))}
+      </div>
+    </div>
+
+    </div>
+  );
 };
 
 export default Unicorn;
