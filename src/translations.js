@@ -6,6 +6,24 @@ const translations = {
       nav_about: "Биз ҳақимизда",
       nav_contact: "Алоқа",
   
+
+
+
+
+
+
+
+
+      
+      user_settings: "Foydalanuvchi sozlamalari",
+username: "Foydalanuvchi nomi",
+enter_username: "Ismingizni kiriting",
+email: "Email",
+enter_email: "Email kiriting",
+password: "Parol",
+enter_password: "Parolni kiriting",
+submit: "Saqlash",
+
       // === FOOTER ===
       footer_contact_title: "Биз билан боғланинг",
       footer_message_title: "Хабар юборинг",
@@ -133,6 +151,16 @@ const translations = {
       nav_about: "О нас",
       nav_contact: "Контакты",
   
+
+            user_settings: "Настройки пользователя",
+username: "Имя пользователя",
+enter_username: "Введите имя",
+email: "Email",
+enter_email: "Введите email",
+password: "Пароль",
+enter_password: "Введите пароль",
+submit: "Сохранить",
+
       // === FOOTER ===
       footer_contact_title: "Свяжитесь с нами",
       footer_message_title: "Отправить сообщение",
@@ -252,6 +280,22 @@ const translations = {
       nav_about: "About Us",
       nav_contact: "Contact",
   
+
+
+
+
+
+
+
+            user_settings: "User Settings",
+username: "Username",
+enter_username: "Enter your name",
+email: "Email",
+enter_email: "Enter email",
+password: "Password",
+enter_password: "Enter password",
+submit: "Submit",
+
       // === FOOTER ===
       footer_contact_title: "Contact Us Now",
       footer_message_title: "Send a Message",
