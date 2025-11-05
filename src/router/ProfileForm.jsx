@@ -111,7 +111,8 @@ const handleSave = async () => {
     } else if (err.response?.status === 500) {
       alert("❌ Server xatosi. Backend loglarni tekshiring.");
     } else {
-      alert("❌ Noma'lum xato. Konsolni oching (F12).");
+      alert("❌ Rasmni xajmi juda katta xajmi kichik rasm kiriting");
+
     }
   }
 };
