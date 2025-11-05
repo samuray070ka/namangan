@@ -1,53 +1,70 @@
-// src/router/ProfileForm.jsx
-import React, { useState, useRef, useEffect } from "react";
-import "../components/Components.css";
+// src/pages/Unicorn.jsx (yoki ProfileForm.jsx)
+import React, { useState, useEffect, useRef } from 'react';
+import axios from "axios";
 import { FiUploadCloud } from "react-icons/fi";
-import { useLanguage } from "../context/LanguageContext";
+import { RiDeleteBin6Line } from "react-icons/ri";
 
-function ProfileForm({ companyId, onClose, onSave }) {
-  const { t } = useLanguage();
-  const isEdit = !!companyId;
-  const fileInputRef = useRef(null);
+// Images
+import DefoultImg from '../assets/rayon__img.png';
+
+// Components
+import "./Page.css";
+
+const ProfileForm = () => {
+  const [tumanlar, setTumanlar] = useState([]);
+  const [modal, setModal] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
+  const [currentId, setCurrentId] = useState(null);
+
+  // Forma
+  const [title, setTitle] = useState("");
+  const [desc, setDesc] = useState("");
   const [imagePreview, setImagePreview] = useState(null);
-  const [formData, setFormData] = useState({
-    company_name: "",
-    workplace: "",
-    name: "",
-    participation_date: "",
-    project_branch: "",
-    project_duration: "",
-    initiator_name: "",
-    project_status: "",
-    land_area: "",
-    vacant_jobs: "",
-    allocated_lots: "",
-    phone_number: "",
-    production_plan: "",
-    production_actual: "",
-    own_funds: "",
-    bank_loan: "",
-    foreign_funds: "",
-    export_plan: "",
-    export_actual: "",
-    allocated_plan: "",
-    allocated_actual: "",
-  });
+  const fileInputRef = useRef(null);
 
-  // === localStorage dan yuklash (edit uchun) ===
-  useEffect(() => {
-    if (isEdit && companyId) {
-      const saved = localStorage.getItem(`company_${companyId}`);
-      if (saved) {
-        const data = JSON.parse(saved);
-        setFormData(data.formData || {});
-        setImagePreview(data.imagePreview || null);
-      }
+  // Ma'lumotlarni yuklash
+  const fetchData = async () => {
+    try {
+      const res = await axios.get("http://localhost:5000/api/unicorns");
+      setTumanlar(res.data);
+    } catch (err) {
+      console.error("Ma'lumot olishda xato:", err);
     }
-  }, [companyId, isEdit]);
+  };
 
-  // === Rasm tanlash ===
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  // Modal ochish
+  const openModal = (item = null) => {
+    if (item) {
+      setIsEdit(true);
+      setCurrentId(item._id);
+      setTitle(item.title);
+      setDesc(item.desc);
+      setImagePreview(item.image || null);
+    } else {
+      setIsEdit(false);
+      setCurrentId(null);
+      setTitle("");
+      setDesc("");
+      setImagePreview(null);
+    }
+    setModal(true);
+  };
+
+  const closeModal = () => {
+    setModal(false);
+    setTitle("");
+    setDesc("");
+    setImagePreview(null);
+    setCurrentId(null);
+    setIsEdit(false);
+  };
+
+  // Rasm tanlash
   const handleImageClick = () => fileInputRef.current.click();
-
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file && file.type.startsWith("image/")) {
@@ -57,127 +74,204 @@ function ProfileForm({ companyId, onClose, onSave }) {
     }
   };
 
-  // === Input o‘zgarishi ===
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+// handleSave — XATOSIZ + DARHOL REFRESH
+const handleSave = async () => {
+  if (!title.trim() || !desc.trim()) {
+    alert("Iltimos, nomi va izohni to'ldiring!");
+    return;
+  }
+
+  const data = {
+    title,
+    desc,
+    image: imagePreview || "",
   };
 
-  // === SAQLASH (localStorage + modal yopish) ===
-  const handleSave = () => {
-    const id = companyId || Date.now().toString(); // yangi ID
-    const dataToSave = { formData, imagePreview };
+  try {
+    if (isEdit) {
+      await axios.put(`http://localhost:5000/api/unicorns/${currentId}`, data);
+      alert("✅ Muvaffaqiyatli yangilandi!");
+    } else {
+      await axios.post("http://localhost:5000/api/unicorns", data);
+      alert("✅ Yangi kompaniya qo'shildi!");
+    }
 
-    localStorage.setItem(`company_${id}`, JSON.stringify(dataToSave));
-    alert(t("data_saved") || "Ma'lumotlar saqlandi!");
+    // Darhol yangilash
+    window.location.reload();
+  } catch (err) {
+    console.error("Xato tafsiloti:", err);
 
-    if (onSave) onSave(id);
-    if (onClose) onClose(); // Modalni yopish
-  };
+    if (err.code === "ERR_NETWORK") {
+      alert("❌ Server ishlamayapti. Backendni yoqing!");
+    } else if (err.response?.status === 404) {
+      alert("❌ Yo'q element! ID noto'g'ri.");
+    } else if (err.response?.status === 500) {
+      alert("❌ Server xatosi. Backend loglarni tekshiring.");
+    } else {
+      alert("❌ Noma'lum xato. Konsolni oching (F12).");
+    }
+  }
+};
+
+// O‘CHIRISH
+// handleDelete — XATOSIZ
+const handleDelete = async (id) => {
+  if (!window.confirm("❌ Rostan o‘chirasizmi?")) return;
+
+  try {
+    await axios.delete(`http://localhost:5000/api/unicorns/${id}`);
+    alert("✅ Muvaffaqiyatli o‘chirildi!");
+    window.location.reload();
+  } catch (err) {
+    console.error("O‘chirish xatosi:", err);
+    alert("❌ O‘chirib bo‘lmadi. Serverni tekshiring.");
+  }
+};
 
   return (
-    <div className="profile-modal-content">
-      {/* Modal Header */}
-      <div className="modal-header">
-        <h3>{isEdit ? t("edit_company") : t("add_company")}</h3>
-        <button className="close-btn" onClick={onClose}>×</button>
-      </div>
+    <div className="container">
+      <br />
+      <div className="swiper_all">
+        <div className="header-flex" style={{ marginBottom: "20px" }}>
+          <h1 className="swiper_h1">Районлар</h1>
+          <button onClick={() => openModal()} className="save-btn">
+            + Yangi qo'shish
+          </button>
+        </div>
 
-      {/* Foto */}
-      <div className="photo-section">
-        <div className="photo-box" onClick={handleImageClick}>
-          {imagePreview ? (
-            <img src={imagePreview} alt="Preview" className="preview-image" />
+        <div className="swiper">
+          {tumanlar.length > 0 ? (
+            tumanlar.map((item) => (
+              <div key={item._id} className="swiper_slide">
+                <div className="swiper_hr"></div>
+                <div className="swiper_flex unicorn_slide">
+                  <div className="swiper_text">
+                    <h2>{item.title}</h2>
+                    <h6>{item.desc}</h6>
+                    <p>
+                      <small>
+                        {new Date(item.date).toLocaleDateString("uz-UZ", {
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </small>
+                    </p>
+                  </div>
+
+                  <div className="swiper_edit">
+                    <div className="swiper_edit-img">
+                      <img
+                        src={item.image || DefoultImg}
+                        alt={item.title}
+                        style={{ borderRadius: "8px", objectFit: "cover", width: "100%", height: "120px" }}
+                      />
+                    </div>
+
+                    <div className="swiper_actions" style={{ marginTop: "10px", display: "flex", gap: "10px" }}>
+                      <button onClick={() => openModal(item)} className="edit-btn">
+                        Tahrirlash
+                      </button>
+                      <RiDeleteBin6Line
+                        onClick={() => handleDelete(item._id)}
+                        style={{ cursor: "pointer", color: "#e74c3c", fontSize: "20px" }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))
           ) : (
-            <>
-              <FiUploadCloud className="upload-icon" />
-              <p className="upload-text">{t("upload_click_text")}</p>
-              <span className="upload-types">{t("upload_types")}</span>
-            </>
+            <div style={{ textAlign: "center", padding: "40px" }}>
+                <p>Malumot qidirilmoqda...</p>
+            </div>
           )}
-          <input
-            type="file"
-            ref={fileInputRef}
-            style={{ display: "none" }}
-            accept="image/*"
-            onChange={handleImageChange}
-          />
-          <button type="button" className="upload-btn" onClick={(e) => { e.stopPropagation(); handleImageClick(); }}>
-            {t("upload_button")}
-          </button>
         </div>
       </div>
 
-      {/* Forma */}
-      <div className="form-section">
-        <h4>{t("general_info")}</h4>
-        <div className="form-grid">
-          {Object.keys(formData).map((key) => (
-            <div className="form-item" key={key}>
-              <label>{t(key)}</label>
-              <input
-                type="text"
-                name={key}
-                placeholder={t(`${key}_ph`) || ""}
-                value={formData[key]}
-                onChange={handleInputChange}
-              />
+      {/* Modal */}
+      {modal && (
+        <div className="modal-overlay" onClick={closeModal}>
+          <div className="profile-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="profile-modal-content">
+              <div className="modal-header">
+                <h3>{isEdit ? "Tahrirlash" : "Yangi qo'shish"}</h3>
+                <button className="close-btn" onClick={closeModal}>×</button>
+              </div>
+
+              <div className="photo-section">
+                <div className="photo-box" onClick={handleImageClick}>
+                  {imagePreview ? (
+                    <img src={imagePreview} alt="Preview" className="preview-image" />
+                  ) : (
+                    <>
+                      <FiUploadCloud className="upload-icon" />
+                      <p className="upload-text">Rasm yuklash uchun bosing</p>
+                      <span className="upload-types">JPG, PNG</span>
+                    </>
+                  )}
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    style={{ display: "none" }}
+                    accept="image/*"
+                    onChange={handleImageChange}
+                  />
+                  <button
+                    type="button"
+                    className="upload-btn"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleImageClick();
+                    }}
+                  >
+                    Rasm tanlash
+                  </button>
+                </div>
+              </div>
+
+              <div className="form-section">
+                <h4>Ma'lumotlar</h4>
+                <div style={{ display: "grid", gap: "16px" }}>
+                  <div>
+                    <label>Nomi</label>
+                    <input
+                      type="text"
+                      value={title}
+                      onChange={(e) => setTitle(e.target.value)}
+                      placeholder="Masalan: IT Park"
+                      style={{ width: "100%", padding: "10px", borderRadius: "6px", border: "1px solid #ddd" }}
+                    />
+                  </div>
+                  <div>
+                    <label>Izoh</label>
+                    <textarea
+                      rows="4"
+                      value={desc}
+                      onChange={(e) => setDesc(e.target.value)}
+                      placeholder="Qisqacha izoh..."
+                      style={{ width: "100%", padding: "10px", borderRadius: "6px", border: "1px solid #ddd", resize: "vertical" }}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="modal-actions" style={{ marginTop: "20px", textAlign: "right" }}>
+                <button className="cancel-btn" onClick={closeModal}>
+                  Bekor qilish
+                </button>
+                <button className="save-btn" onClick={handleSave} style={{ marginLeft: "10px" }}>
+                  {isEdit ? "Yangilash" : "Saqlash"}
+                </button>
+              </div>
             </div>
-          ))}
+          </div>
         </div>
-
-        {/* Pastdagi bloklar (production, cost, export, allocated) */}
-        <div className="form-section-bottom">
-          {/* Production Capacity */}
-          <div className="bottom-box">
-            <h4>{t("production_capacity")}</h4>
-            <div className="double-inputs">
-              <div><label>{t("plan")}</label><input name="production_plan" value={formData.production_plan} onChange={handleInputChange} placeholder={t("plan_ph")} /></div>
-              <div><label>{t("actual")}</label><input name="production_actual" value={formData.production_actual} onChange={handleInputChange} placeholder={t("actual_ph")} /></div>
-            </div>
-          </div>
-
-          {/* Total Project Cost */}
-          <div className="bottom-box">
-            <h4>{t("total_project_cost")}</h4>
-            <div className="quad-inputs">
-              <input name="own_funds" value={formData.own_funds} onChange={handleInputChange} placeholder={t("own_funds_ph")} />
-              <input name="bank_loan" value={formData.bank_loan} onChange={handleInputChange} placeholder={t("bank_loan_ph")} />
-              <input name="foreign_funds" value={formData.foreign_funds} onChange={handleInputChange} placeholder={t("foreign_funds_ph")} />
-            </div>
-          </div>
-
-          {/* Export Value */}
-          <div className="bottom-box">
-            <h4>{t("export_value")}</h4>
-            <div className="double-inputs">
-              <div><label>{t("plan")}</label><input name="export_plan" value={formData.export_plan} onChange={handleInputChange} placeholder={t("plan_ph")} /></div>
-              <div><label>{t("actual")}</label><input name="export_actual" value={formData.export_actual} onChange={handleInputChange} placeholder={t("actual_ph")} /></div>
-            </div>
-          </div>
-
-          {/* Allocated Funds */}
-          <div className="bottom-box">
-            <h4>{t("allocated_funds")}</h4>
-            <div className="double-inputs">
-              <div><label>{t("plan")}</label><input name="allocated_plan" value={formData.allocated_plan} onChange={handleInputChange} placeholder={t("plan_ph")} /></div>
-              <div><label>{t("actual")}</label><input name="allocated_actual" value={formData.allocated_actual} onChange={handleInputChange} placeholder={t("actual_ph")} /></div>
-            </div>
-          </div>
-        </div>
-
-        {/* TUGMALAR: Faqat "Save" va "Cancel" */}
-        <div className="modal-actions" style={{ marginTop: "20px", textAlign: "right" }}>
-          <button className="cancel-btn" onClick={onClose}>
-            {t("cancel") || "Bekor qilish"}
-          </button>
-          <button className="save-btn" onClick={handleSave} style={{ marginLeft: "10px" }}>
-            {t("save_data") || "Saqlash"}
-          </button>
-        </div>
-      </div>
+      )}
     </div>
   );
-}
+};
 
 export default ProfileForm;

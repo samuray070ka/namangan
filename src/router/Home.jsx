@@ -32,38 +32,14 @@ function Home() {
           </div>
         </div>
 
-        {/* === RESULT & STATISTIKA === */}
         <Result />
         
         <Statistika />
 
-        {/* === DISTRICTS (Tumanlar) === */}
-        {/* <div className='swiper_all'>
-          <h1 className='swiper_h1'>Туманлар</h1>
-          <div className="swiper">
-            {
-              tumanlar.map((item, index) => {
-                return (
-                  <Link
-                    key={index} className='swiper_slide'
-                    to={`/${item.slog}`}
-                  >
-                    <div className='swiper_hr'></div>
-                    <div className='swiper_flex'>
-                      <h2>{item.title}</h2>
-                      <h6>{item.desc}</h6>
-                    </div>
-                  </Link>
-                )
-              })
-            }
-          </div>
-        </div> */}
         <Map/>
 
 
 
-       {/* === ABOUT SECTION === */}
         <div className="about">
           <div className="about_left">
             <h2 className="about_title">{t("about_title")}</h2>

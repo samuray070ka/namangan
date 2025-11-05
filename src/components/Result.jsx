@@ -179,18 +179,6 @@ function Result() {
             )}
 
             <form onSubmit={handleSubmit} className="modal-form">
-              {/* <div className="form-group">
-                <label>{t("username") || "Foydalanuvchi nomi"}</label>
-                <input
-                  type="text"
-                  name="username"
-                  value={formData.username}
-                  onChange={handleInputChange}
-                  required
-                  placeholder={t("enter username") || "Ismingizni kiriting"}
-                />
-              </div> */}
-
               <div className="form-group">
                 <label>{t("email") || "Email"}</label>
                 <input
