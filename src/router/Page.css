@@ -1652,8 +1652,9 @@ label input {
 
 .photo-box {
   position: relative;
-  width: 260px;
-  height: 180px;
+  max-width: 360px;
+  max-height: 380px;
+  padding: 10  px 10px;
   background-color: white;
   border: 2px dashed #cbd5e1;
   border-radius: 12px;
@@ -1688,14 +1689,29 @@ label input {
 }
 
 .upload-btn {
+  width: 90%;
   margin-top: 8px;
-  background: #2563eb;
+  /* background: #2563eb; */
   color: #000;
   border: none;
   border-radius: 6px;
   padding: 6px 14px;
   cursor: pointer;
   font-size: 13px;
+  display: block;
+}
+
+.quyis {
+  width: 90%;
+  margin-top: 8px;
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 14px;
+  cursor: pointer;
+  font-size: 13px;
+  display: block;
 }
 
 .edit1-btn {

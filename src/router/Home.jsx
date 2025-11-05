@@ -13,6 +13,50 @@ import Map from "../components/Map";
 function Home() {
   const { t } = useLanguage(); // Tarjima funksiyasi
 
+  // Dinamik districtlar (6 ta)
+  // const districts = Array(6).fill({
+  //   name: t("district_name"),
+  //   updated: t("last_updated"),
+  // });
+  const tumanlar = [
+    {
+      slog: "slog1",
+      id: 1,
+      title: "Поп миршикори мчж",
+      desc: "Дата изменения | 18:37"
+    },
+    {
+      slog: "slog2",
+      id: 2,
+      title: "Поп миршикори мчж",
+      desc: "Дата изменения | 18:37"
+    },
+    {
+      slog: "slog3",
+      id: 3,
+      title: "Поп миршикори мчж",
+      desc: "Дата изменения | 18:37"
+    },
+    {
+      slog: "slog4",
+      id: 4,
+      title: "Поп миршикори мчж",
+      desc: "Дата изменения | 18:37"
+    },
+    {
+      slog: "slog5",
+      id: 5,
+      title: "Поп миршикори мчж",
+      desc: "Дата изменения | 18:37"
+    },
+    {
+      slog: "slog6",
+      id: 6,
+      title: "Поп миршикори мчж",
+      desc: "Дата изменения | 18:37"
+    }
+  ]
+
   return (
     <div className="home">
       <div className="container">

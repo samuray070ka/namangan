@@ -42,26 +42,26 @@
 }
 
 /* kichik marker (doira) */
-.district .marker {
+/* .district .marker {
   width: 18px;
   height: 18px;
   border-radius: 50%;
   background: #eafde9;
-}
+} */
 
 /* yozuv */
-.district .district-text {
+/* .district .district-text {
   padding: 6px 10px;
   border-radius: 20px;
   transform-origin: left center;
-}
+} */
 
 /* hover/active effekti uchun */
 
-.district.active .district-text {
+/* .district.active .district-text:hover {
   color: rgba(24, 38, 64, 1);
   transform: translateY(-4px);
-}
+} */
 
 /* agar hover bo'lsa boshqalari xira bo'lishi .inline style yordamida ham qo'yilgan */
 
@@ -112,6 +112,9 @@
   color: rgba(24, 38, 64, 1);
 
 }
+/* .district-text:hover{
+  transform: translateY(-2px);
+} */
 .img_flex{
     width: 100%;
     height: 100vh;
@@ -280,3 +283,6 @@
     font-size: 14px;
   }
 }
+
+
+

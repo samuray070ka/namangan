@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "./Map.css";
 import mapImage from "../assets/123.svg"; // assets ga rasmni joylashtiring
-import { IoLocationOutline } from "react-icons/io5";
+import { IoLocationSharp } from "react-icons/io5";
 export default function Map() {
   const [hovered, setHovered] = useState(null);
   const districts = [
@@ -19,7 +19,7 @@ export default function Map() {
     { id: 11, name: "Chortoq", slog: "chortoq", slug_in:"chortoq_slug", },
     { id: 12, name: "Uchqoʻrgʻon", slog: "uchqorgon", slug_in:"uchqorgon_slug", },
     { id: 13, name: "Uychi", slog: "uychi", slug_in:"uychi_slug", },
-    { id: 14, name: "Norin", slog: "norin", slug_in:"norin_slug", }
+    { id: 14, name: "Norin", slog: "norin", slug_in:"_slug", }
   ];
 
   return (
@@ -43,7 +43,7 @@ export default function Map() {
             >
                 <div className="d1">
 
-            <IoLocationOutline className="icon"/>
+            <IoLocationSharp className="icon"/>
             <span className="district-text">{d.name}</span>
                 </div>
           </Link>

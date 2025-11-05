@@ -179,7 +179,7 @@ function Result() {
             )}
 
             <form onSubmit={handleSubmit} className="modal-form">
-              <div className="form-group">
+              {/* <div className="form-group">
                 <label>{t("username") || "Foydalanuvchi nomi"}</label>
                 <input
                   type="text"
@@ -189,7 +189,7 @@ function Result() {
                   required
                   placeholder={t("enter username") || "Ismingizni kiriting"}
                 />
-              </div>
+              </div> */}
 
               <div className="form-group">
                 <label>{t("email") || "Email"}</label>
