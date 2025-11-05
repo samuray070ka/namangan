@@ -6,9 +6,9 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 
 // Images
 import DefoultImg from '../assets/rayon__img.png';
-
-// Components
 import "./Page.css";
+
+import { useLanguage } from "../context/LanguageContext";
 
 const ProfileForm = () => {
   const [tumanlar, setTumanlar] = useState([]);
@@ -31,6 +31,7 @@ const ProfileForm = () => {
       console.error("Ma'lumot olishda xato:", err);
     }
   };
+const { t } = useLanguage();
 
   useEffect(() => {
     fetchData();
@@ -133,9 +134,9 @@ const handleDelete = async (id) => {
       <br />
       <div className="swiper_all">
         <div className="header-flex" style={{ marginBottom: "20px" }}>
-          <h1 className="swiper_h1">Районлар</h1>
-          <button onClick={() => openModal()} className="save-btn">
-            + Yangi qo'shish
+          <h1 className="swiper_h1">{t("rayonlar_add")}</h1>
+         <button onClick={() => openModal()} className="save-btn">
+            + {t("yangi_qoshish_btn_add")}
           </button>
         </div>
 
@@ -185,7 +186,7 @@ const handleDelete = async (id) => {
             ))
           ) : (
             <div style={{ textAlign: "center", padding: "40px" }}>
-                <p>Malumot qidirilmoqda...</p>
+                <p>{t("qidirilmoqda_add")}</p>
             </div>
           )}
         </div>

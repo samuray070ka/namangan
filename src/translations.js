@@ -18,13 +18,19 @@ const translations = {
 
       
       user_settings: "Foydalanuvchi sozlamalari",
-username: "Foydalanuvchi nomi",
-enter_username: "Ismingizni kiriting",
-email: "Email",
-enter_email: "Email kiriting",
-password: "Parol",
-enter_password: "Parolni kiriting",
-submit: "Saqlash",
+      username: "Foydalanuvchi nomi",
+      enter_username: "Ismingizni kiriting",
+      email: "Email",
+      enter_email: "Email kiriting",
+      password: "Parol",
+      enter_password: "Parolni kiriting",
+      
+      submit: "Saqlash",
+      // rayonlar_: "районлар",
+      // rayonlar_malumot: "Ҳозирча ҳеч қандай маълумот йўқ",
+      qidirilmoqda_add:"Маълумот қидирилмоқда...",
+      rayonlar_add:"Районлар",
+      yangi_qoshish_btn_add:"Янги қўшиш",
 
       // === FOOTER ===
       footer_contact_title: "Биз билан боғланинг",
@@ -152,7 +158,12 @@ submit: "Saqlash",
       nav_home: "Главная",
       nav_about: "О нас",
       nav_contact: "Контакты",
-  
+  //  rayonlar_: "районы",
+  //     rayonlar_malumot: "Пока нет никакой информации",
+      qidirilmoqda_add:"Информация находится в поиске...",
+      rayonlar_add:"Районы",
+      yangi_qoshish_btn_add:"Добавить новое",
+
 
             user_settings: "Настройки пользователя",
 username: "Имя пользователя",
@@ -287,7 +298,11 @@ rayonlar_: "районы",
 
 
 
-
+// rayonlar_: "regions",
+//       rayonlar_malumot: "There is no information yet",
+      rayonlar_add:"Districts",
+      yangi_qoshish_btn_add:"Add new",      
+      qidirilmoqda_add:"Searching for information...",
 
 
 
