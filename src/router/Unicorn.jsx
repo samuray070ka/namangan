@@ -17,7 +17,7 @@ const Unicorn = () => {
   // Backenddan ma'lumotlarni olish
   const fetchTumanlar = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/unicorns");
+      const res = await axios.get("https://namangan-back-api.onrender.com/api/unicorns");
       setTumanlar(res.data);
     } catch (error) {
       console.error("Ma'lumot olishda xato:", error);
