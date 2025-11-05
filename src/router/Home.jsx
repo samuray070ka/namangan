@@ -22,15 +22,18 @@ function Home() {
 
   return (
     <div className="home">
-      <div className="container">
-        {/* === BANNER === */}
         <div className="banner">
           <div className="dark">
+      <div className="container">
             <h1 className="dark_h1">{t("banner_title")}</h1>
             <div className="dark_hr"></div>
             <p className="dark_p">{t("banner_text")}</p>
           </div>
         </div>
+      </div>
+      <div className="container">
+        {/* === BANNER === */}
+        
 
         <Result />
         

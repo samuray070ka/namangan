@@ -47,7 +47,8 @@ function UnicPage() {
                 <div className='swiper_flex unicorn_slide'>
                   <div className="swiper_text">
                     <h2>{item.title}</h2>
-                    <h6>{item.desc}</h6>
+                    <br />
+                    {/* <h6>{item.desc}</h6> */}
                     <p>
                       <small>
                         {new Date(item.date).toLocaleDateString("uz-UZ", {
