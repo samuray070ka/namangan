@@ -9,7 +9,7 @@ import {Routes, Route} from "react-router-dom"
 import ProfileForm from './router/ProfileForm';
 // import VacanciesTable from "./router/VacanciesTable"
 import Unicorn from './router/Unicorn';
-// import UnicPage from './router/UnicPage';
+import UnicPage from './router/UnicPage';
 import Contact from './router/Contact';
 
 function App() {
@@ -24,7 +24,7 @@ function App() {
           {/* <Route path='/edit' element={<VacanciesTable/>}/> */}
           <Route path='/contact' element={<Contact/>}/>
           <Route path='/:slug' element={<Unicorn/>}/>
-          {/* <Route path='/:slug/:slug_slug' element={<UnicPage/>}/> */}
+          <Route path='/:slug/:id' element={<UnicPage/>}/>
         </Routes>
         <Footer/>
       </div>

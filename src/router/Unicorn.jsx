@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import axios from "axios";
 import "./Page.css";
 import { useLanguage } from "../context/LanguageContext";
-
+import {Link} from "react-router-dom"
 // Images
 import DefoultImg from '../assets/rayon__img.png';
 
@@ -40,11 +40,12 @@ const Unicorn = () => {
           {t("rayonlar_")}
             </h1>
         </div>
-
+        
         <div className="swiper">
           {tumanlar.length > 0 ? (
             tumanlar.map((item) => (
-              <div key={item._id} className='swiper_slide'>
+                <Link to={`${item._id}`} className='link'>
+              <div className='swiper_slide'>
                 <div className='swiper_hr'></div>
                 <div className='swiper_flex unicorn_slide'>
                   <div className="swiper_text">
@@ -53,8 +54,8 @@ const Unicorn = () => {
                     <p>
                       <small>
                         {new Date(item.date).toLocaleDateString("uz-UZ", {
-                          year: "numeric",
-                          month: "long",
+                            year: "numeric",
+                            month: "long",
                           day: "numeric",
                           hour: "2-digit",
                           minute: "2-digit"
@@ -69,16 +70,17 @@ const Unicorn = () => {
                         src={item.image || DefoultImg}
                         alt={item.title}
                         style={{ 
-                          width: "100%", 
-                          height: "100%", 
-                          objectFit: "cover",
-                          borderRadius: "8px"
+                            width: "100%", 
+                            height: "100%", 
+                            objectFit: "cover",
+                            borderRadius: "8px"
                         }}
-                      />
+                        />
                     </div>
                   </div>
                 </div>
               </div>
+                        </Link>
             ))
           ) : (
             <div className="empty-state" style={{ textAlign: 'center', padding: '40px' }}>
