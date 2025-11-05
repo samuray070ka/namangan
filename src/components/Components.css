@@ -109,7 +109,18 @@
    ====================== */
 
 /* 🧩 1200px dan kichik ekranlarda */
-@media (max-width: 1200px) {
+@media (max-width: 1367px) {
+  .pages {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 30px;
+  }
+
+  .work {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 1266px) {
   .pages {
     grid-template-columns: repeat(4, 1fr);
     gap: 30px;
@@ -119,7 +130,16 @@
     grid-column: span 2;
   }
 }
+@media (max-width: 1025px) {
+  .pages {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
 
+  .work {
+    grid-column: span 2;
+  }
+}
 /* 🧩 992px dan kichik ekranlarda (planshet) */
 @media (max-width: 992px) {
   .pages {

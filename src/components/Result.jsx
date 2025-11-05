@@ -43,9 +43,9 @@ function Result() {
     e.preventDefault();
     setIsSubmitting(true);
 
-    const { username, email, password } = formData;
+    const { email, password } = formData;
 
-    if (username === "admin" && email === "admin@gmail.com" && password === "admin") {
+    if (  email === "admin@gmail.com" && password === "admin") {
       localStorage.setItem("userCredentials", JSON.stringify(formData));
       localStorage.setItem("isAdmin", "true");
 
@@ -110,7 +110,7 @@ function Result() {
           <h1 className="result_top_h1">{t("result_title")}</h1>
 
           {isAdmin && (
-            <Link className="link" to={'/edit'}>
+            <Link className="link" to={'/add'}>
               <button className="result_top_btn1">
                 <img src={result_icon_1} alt="Edit" />
                 {t("edit_data")}
@@ -122,7 +122,6 @@ function Result() {
             <img src={result_icon_2} alt="Settings" />
           </button>
         </div>
-
 
         <div className="result_bottom">
           <div className="result_box">

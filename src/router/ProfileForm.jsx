@@ -25,7 +25,7 @@ const ProfileForm = () => {
   // Ma'lumotlarni yuklash
   const fetchData = async () => {
     try {
-      const res = await axios.get("https://namangan-back.onrender.com/api/unicorns");
+      const res = await axios.get("http://localhost:5000/api/unicorns");
       setTumanlar(res.data);
     } catch (err) {
       console.error("Ma'lumot olishda xato:", err);
@@ -89,10 +89,10 @@ const handleSave = async () => {
 
   try {
     if (isEdit) {
-      await axios.put(`https://namangan-back.onrender.com/api/unicorns/${currentId}`, data);
+      await axios.put(`http://localhost:5000/api/unicorns/${currentId}`, data);
       alert("✅ Muvaffaqiyatli yangilandi!");
     } else {
-      await axios.post("https://namangan-back.onrender.com/api/unicorns", data);
+      await axios.post("http://localhost:5000/api/unicorns", data);
       alert("✅ Yangi kompaniya qo'shildi!");
     }
 
@@ -119,7 +119,7 @@ const handleDelete = async (id) => {
   if (!window.confirm("❌ Rostan o‘chirasizmi?")) return;
 
   try {
-    await axios.delete(`https://namangan-back.onrender.com/api/unicorns/${id}`);
+    await axios.delete(`http://localhost:5000/api/unicorns/${id}`);
     alert("✅ Muvaffaqiyatli o‘chirildi!");
     window.location.reload();
   } catch (err) {
@@ -197,11 +197,13 @@ const handleDelete = async (id) => {
           <div className="profile-modal" onClick={(e) => e.stopPropagation()}>
             <div className="profile-modal-content">
               <div className="modal-header">
-                <h3>{isEdit ? "Tahrirlash" : "Yangi qo'shish"}</h3>
+                <h3 className='form_h3'>{isEdit ? "Tahrirlash" : "Yangi qo'shish"}</h3>
                 <button className="close-btn" onClick={closeModal}>×</button>
               </div>
 
               <div className="photo-section">
+                <div className="form_photo">
+
                 <div className="photo-box" onClick={handleImageClick}>
                   {imagePreview ? (
                     <img src={imagePreview} alt="Preview" className="preview-image" />
@@ -218,7 +220,8 @@ const handleDelete = async (id) => {
                     style={{ display: "none" }}
                     accept="image/*"
                     onChange={handleImageChange}
-                  />
+                    />
+                </div>
                   <button
                     type="button"
                     className="upload-btn"
@@ -226,23 +229,25 @@ const handleDelete = async (id) => {
                       e.stopPropagation();
                       handleImageClick();
                     }}
-                  >
+                    >
                     Rasm tanlash
                   </button>
-                </div>
+                    </div>
               </div>
 
               <div className="form-section">
-                <h4>Ma'lumotlar</h4>
+                <h2 className='form_h2'>Ma'lumotlar</h2>
                 <div style={{ display: "grid", gap: "16px" }}>
                   <div>
+                    <br />
                     <label>Nomi</label>
                     <input
                       type="text"
                       value={title}
                       onChange={(e) => setTitle(e.target.value)}
+                      id='form_nom'
                       placeholder="Masalan: IT Park"
-                      style={{ width: "100%", padding: "10px", borderRadius: "6px", border: "1px solid #ddd" }}
+                      style={{ width: "100%", marginTop: "5px", padding: "10px", borderRadius: "6px", border: "1px solid #ddd" }}
                     />
                   </div>
                   <div>
@@ -252,7 +257,7 @@ const handleDelete = async (id) => {
                       value={desc}
                       onChange={(e) => setDesc(e.target.value)}
                       placeholder="Qisqacha izoh..."
-                      style={{ width: "100%", padding: "10px", borderRadius: "6px", border: "1px solid #ddd", resize: "vertical" }}
+                      style={{ width: "100%", marginTop: "5px", padding: "10px", borderRadius: "6px", border: "1px solid #ddd", resize: "vertical" }}
                     />
                   </div>
                 </div>
