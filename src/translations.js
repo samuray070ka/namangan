@@ -6,6 +6,8 @@ const translations = {
       nav_about: "Биз ҳақимизда",
       nav_contact: "Алоқа",
   
+ rayonlar_: "районлар",
+      rayonlar_malumot: "Ҳозирча ҳеч қандай маълумот йўқ",
 
 
 
@@ -160,6 +162,8 @@ enter_email: "Введите email",
 password: "Пароль",
 enter_password: "Введите пароль",
 submit: "Сохранить",
+rayonlar_: "районы",
+      rayonlar_malumot: "Пока нет никакой информации",
 
       // === FOOTER ===
       footer_contact_title: "Свяжитесь с нами",
@@ -408,7 +412,9 @@ submit: "Submit",
       next_page: "Next",
       edit: "Edit",
       delete: "Delete",
-  
+  rayonlar_: "regions",
+      rayonlar_malumot: "There is no information yet",
+
       read_more: "READ MORE",
     },
   };

@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from "axios";
 import "./Page.css";
+import { useLanguage } from "../context/LanguageContext";
 
 // Images
 import DefoultImg from '../assets/rayon__img.png';
@@ -26,6 +27,7 @@ const Unicorn = () => {
   useEffect(() => {
     fetchTumanlar();
   }, []);
+  const { t } = useLanguage();
 
   return (
     <div className="container">
@@ -34,7 +36,9 @@ const Unicorn = () => {
 
       <div className='swiper_all'>
         <div className="header-flex" style={{ marginBottom: '20px' }}>
-          <h1 className='swiper_h1'>Районлар</h1>
+          <h1 className='swiper_h1'>
+          {t("rayonlar_")}
+            </h1>
         </div>
 
         <div className="swiper">
@@ -78,7 +82,7 @@ const Unicorn = () => {
             ))
           ) : (
             <div className="empty-state" style={{ textAlign: 'center', padding: '40px' }}>
-              <p>Hozircha hech qanday ma'lumot yo‘q</p>
+              <p>{t("rayonlar_malumot")}</p>
             </div>
           )}
         </div>

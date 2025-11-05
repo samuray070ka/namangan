@@ -25,7 +25,7 @@ const ProfileForm = () => {
   // Ma'lumotlarni yuklash
   const fetchData = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/unicorns");
+      const res = await axios.get("https://namangan-back.onrender.com/api/unicorns");
       setTumanlar(res.data);
     } catch (err) {
       console.error("Ma'lumot olishda xato:", err);
@@ -89,10 +89,10 @@ const handleSave = async () => {
 
   try {
     if (isEdit) {
-      await axios.put(`http://localhost:5000/api/unicorns/${currentId}`, data);
+      await axios.put(`https://namangan-back.onrender.com/api/unicorns/${currentId}`, data);
       alert("✅ Muvaffaqiyatli yangilandi!");
     } else {
-      await axios.post("http://localhost:5000/api/unicorns", data);
+      await axios.post("https://namangan-back.onrender.com/api/unicorns", data);
       alert("✅ Yangi kompaniya qo'shildi!");
     }
 
@@ -119,7 +119,7 @@ const handleDelete = async (id) => {
   if (!window.confirm("❌ Rostan o‘chirasizmi?")) return;
 
   try {
-    await axios.delete(`http://localhost:5000/api/unicorns/${id}`);
+    await axios.delete(`https://namangan-back.onrender.com/api/unicorns/${id}`);
     alert("✅ Muvaffaqiyatli o‘chirildi!");
     window.location.reload();
   } catch (err) {
