@@ -4,6 +4,7 @@ import "./Components.css";
 import { FaRegFolderOpen } from "react-icons/fa6";
 import Img from "../assets/image.png";
 import { useLanguage } from "../context/LanguageContext"; // YANGI
+import {Link} from "react-router-dom"
 
 function Statistika() {
   const { t } = useLanguage(); // Tarjima funksiyasi
@@ -115,10 +116,12 @@ function Statistika() {
 
             {/* IJARA — faqat admin uchun */}
           {isAdmin && (
+            <Link className="link" to={'/add'}>
             <div className="ijara">
               <FaRegFolderOpen color="#6d5dd3" className="icon" />
               <h2>{t("Ижара")}</h2>
             </div>
+            </Link>
           )}
         </div>
 
