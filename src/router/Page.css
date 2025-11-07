@@ -356,7 +356,7 @@
   height: 250px;
   margin-top: 20px;
   display: flex;
-  align-items: center;
+  /* align-items: center; */
   justify-content: space-between;
 }
 

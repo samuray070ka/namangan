@@ -1,32 +1,32 @@
-// App.jsx (Yangilangan)
+// App.jsx (Yangilangan: To'g'ri route'lar)
 import './App.css';
-import { LanguageProvider } from './context/LanguageContext'; // ✅ YANGI
+import { LanguageProvider } from './context/LanguageContext';
 import Footer from './components/Footer';
 import Navbar from './components/Navbar';
 import ArticlePage from './router/ArticlePage';
 import Home from './router/Home';
-import {Routes, Route} from "react-router-dom"
+import { Routes, Route } from "react-router-dom";
 import ProfileForm from './router/ProfileForm';
-// import VacanciesTable from "./router/VacanciesTable"
-import Unicorn from './router/Unicorn';
-import UnicPage from './router/UnicPage';
+import VacanciesTable from "./router/VacanciesTable";
+import DistrictVillages from './router/DistrictVillages'; // Tumanlar ro'yxati
+import UnicPage from './router/UnicPage'; // Qishloq ichi MChJ
 import Contact from './router/Contact';
 
 function App() {
   return (
-    <LanguageProvider> {/* ✅ BARCHA COMPONENTLAR TILNI BILADI */}
+    <LanguageProvider>
       <div className="App">
-        <Navbar/>
+        <Navbar />
         <Routes>
-          <Route path='/' element={<Home/>}/>
-          <Route path='/about' element={<ArticlePage/>}/>
-          <Route path='/add' element={<ProfileForm/>}/>
-          {/* <Route path='/edit' element={<VacanciesTable/>}/> */}
-          <Route path='/contact' element={<Contact/>}/>
-          <Route path='/:slug' element={<Unicorn/>}/>
-          <Route path='/:slug/:id' element={<UnicPage/>}/>
+          <Route path='/' element={<Home />} />
+          <Route path='/about' element={<ArticlePage />} />
+          <Route path='/add' element={<ProfileForm />} />
+          <Route path='/edit' element={<VacanciesTable />} />
+          <Route path='/contact' element={<Contact />} />
+          <Route path='/district/:district' element={<DistrictVillages />} /> {/* Tuman -> qishloqlar */}
+          <Route path='/unicpage/:location' element={<UnicPage />} /> {/* Qishloq -> MChJ */}
         </Routes>
-        <Footer/>
+        <Footer />
       </div>
     </LanguageProvider>
   );

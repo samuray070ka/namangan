@@ -1,317 +1,304 @@
-// src/router/VacanciesTable.jsx
-import React, { useState, useEffect, useRef } from "react";
-import "../components/Components.css";
-import { FiUploadCloud, FiX } from "react-icons/fi";
-import { TbEdit } from "react-icons/tb";
-import { FiTrash2 } from "react-icons/fi";
-import { useLanguage } from "../context/LanguageContext";
+import React, { useState, useEffect } from "react";
+import { FiEdit, FiTrash, FiX } from "react-icons/fi";
 
-const VacanciesTable = () => {
-  const { t } = useLanguage();
-  const [companies, setCompanies] = useState([]);
-  const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [editingId, setEditingId] = useState(null); // null = yangi, string = edit
-  const [modalFormData, setModalFormData] = useState({
-    company_name: "",
-    workplace: "",
-    name: "",
-    participation_date: "",
-    project_branch: "",
-    project_duration: "",
-    initiator_name: "",
-    project_status: "",
-    land_area: "",
-    vacant_jobs: "",
-    allocated_lots: "",
-    phone_number: "",
-    production_plan: "",
-    production_actual: "",
-    own_funds: "",
-    bank_loan: "",
-    foreign_funds: "",
-    export_plan: "",
-    export_actual: "",
-    allocated_plan: "",
-    allocated_actual: "",
-  });
-  const [modalImagePreview, setModalImagePreview] = useState(null);
-  const fileInputRef = useRef(null);
+function VacanciesTable() {
+  const initialData = [
+    {
+      id: 1,
+      name: "Поп миршикор МЧЖ",
+      count: "",
+      phone: "+99895 2247 22 22",
+      work: "Палпок ишлаб чиқариш",
+      quantity: "10",
+      salary: "1 000 000",
+      conditions: "автотранспорт ҳаражатлари турар жой",
+    },
+  ];
 
-  // === localStorage dan yuklash ===
-  const loadCompanies = () => {
-    const loaded = [];
-    for (let i = 0; i < localStorage.length; i++) {
-      const key = localStorage.key(i);
-      if (key && key.startsWith("company_")) {
-        const id = key.replace("company_", "");
-        try {
-          const data = JSON.parse(localStorage.getItem(key));
-          loaded.push({ id, ...data });
-        } catch (e) {
-          localStorage.removeItem(key);
-        }
-      }
-    }
-    setCompanies(loaded);
-  };
+  const [data, setData] = useState([]);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [authData, setAuthData] = useState({ email: "", password: "" });
+  const [authError, setAuthError] = useState("");
+  const [currentAction, setCurrentAction] = useState(null);
+  const [editingItem, setEditingItem] = useState(null);
+  const [showEditModal, setShowEditModal] = useState(false);
 
   useEffect(() => {
-    loadCompanies();
-    window.addEventListener("storage", loadCompanies);
-    return () => window.removeEventListener("storage", loadCompanies);
+    const savedData = JSON.parse(localStorage.getItem("vacanciesData") || "null");
+    const savedAuth = localStorage.getItem("isAuthenticated");
+    if (savedData && savedData.length > 0) {
+      setData(savedData);
+    } else {
+      setData(initialData);
+      localStorage.setItem("vacanciesData", JSON.stringify(initialData));
+    }
+    if (savedAuth === "true") {
+      setIsAuthenticated(true);
+    }
   }, []);
 
-  // === Modal ochish ===
-  const openModal = (company = null) => {
-    if (company) {
-      setEditingId(company.id);
-      setModalFormData(company.formData || {});
-      setModalImagePreview(company.imagePreview || null);
+  const saveToLocalStorage = (newData) => {
+    localStorage.setItem("vacanciesData", JSON.stringify(newData));
+    setData(newData);
+  };
+
+  const handleAuthSubmit = () => {
+    if (authData.email === "admin@gmail.com" && authData.password === "admin") {
+      setIsAuthenticated(true);
+      localStorage.setItem("isAuthenticated", "true");
+      setShowAuthModal(false);
+      setAuthError("");
+      alert("Хуш келибсиз admin!");
+      if (currentAction) {
+        currentAction();
+        setCurrentAction(null);
+      }
     } else {
-      setEditingId(null);
-      setModalFormData({
-        company_name: "", workplace: "", name: "", participation_date: "",
-        project_branch: "", project_duration: "", initiator_name: "", project_status: "",
-        land_area: "", vacant_jobs: "", allocated_lots: "", phone_number: "",
-        production_plan: "", production_actual: "", own_funds: "", bank_loan: "",
-        foreign_funds: "", export_plan: "", export_actual: "", allocated_plan: "", allocated_actual: ""
-      });
-      setModalImagePreview(null);
-    }
-    setModalIsOpen(true);
-  };
-
-  // === Modal yopish ===
-  const closeModal = () => {
-    setModalIsOpen(false);
-    setEditingId(null);
-  };
-
-  // === Input o‘zgarishi ===
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setModalFormData(prev => ({ ...prev, [name]: value }));
-  };
-
-  // === Rasm yuklash ===
-  const handleImageClick = () => fileInputRef.current?.click();
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file && file.type.startsWith("image/")) {
-      const reader = new FileReader();
-      reader.onloadend = () => setModalImagePreview(reader.result);
-      reader.readAsDataURL(file);
+      setAuthError("Email yoki parol noto'g'ri!");
     }
   };
 
-  // === Saqlash ===
-  const handleSave = () => {
-    const id = editingId || Date.now().toString();
-    const dataToSave = { formData: modalFormData, imagePreview: modalImagePreview };
-    localStorage.setItem(`company_${id}`, JSON.stringify(dataToSave));
-    loadCompanies();
-    closeModal();
-    alert(t("data_saved") || "Ma'lumotlar saqlandi!");
+  const handleEdit = (item) => {
+    if (!isAuthenticated) {
+      setCurrentAction(() => () => handleEdit(item));
+      setShowAuthModal(true);
+      return;
+    }
+    setEditingItem({ ...item });
+    setShowEditModal(true);
   };
 
-  // === O‘chirish ===
   const handleDelete = (id) => {
-    if (window.confirm(t("delete_confirm") || "O‘chirishni xohlaysizmi?")) {
-      localStorage.removeItem(`company_${id}`);
-      loadCompanies();
+    if (!isAuthenticated) {
+      setCurrentAction(() => () => handleDelete(id));
+      setShowAuthModal(true);
+      return;
+    }
+    if (window.confirm("Rostdan ham o'chirmoqchimisiz?")) {
+      const newData = data.filter((item) => item.id !== id);
+      saveToLocalStorage(newData);
     }
   };
 
-  // === Bo‘sh holat ===
-  if (companies.length === 0 && !modalIsOpen) {
-    return (
-      <div className="vacancies-section">
-        <h3 className="vacancy-header">{t("vacancies_title")}</h3>
-        <p>{t("no_data") || "Hali hech qanday kompaniya qo‘shilmagan."}</p>
-        <button className="save-btn" onClick={() => openModal()}>
-          {t("add_company") || "Yangi kompaniya qo‘shish"}
-        </button>
-      </div>
+  const handleEditSubmit = () => {
+    const newData = data.map((item) =>
+      item.id === editingItem.id ? editingItem : item
     );
-  }
+    saveToLocalStorage(newData);
+    setShowEditModal(false);
+    setEditingItem(null);
+  };
+
+  const handleAddNew = () => {
+    if (!isAuthenticated) {
+      setCurrentAction(() => handleAddNew);
+      setShowAuthModal(true);
+      return;
+    }
+    const newItem = {
+      id: Date.now(),
+      name: "Янги МЧЖ",
+      count: "",
+      phone: "+998",
+      work: "Иш тури",
+      quantity: "0",
+      salary: "0",
+      conditions: "Қулайликлар",
+    };
+    const newData = [...data, newItem];
+    saveToLocalStorage(newData);
+  };
+
+  const handleDoubleClick = (item) => {
+    if (isAuthenticated) {
+      handleEdit(item);
+    }
+  };
 
   return (
-    <>
-      {/* === JADVAL === */}
-      <div className="vacancies-section">
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
-          <h3 className="vacancy-header">{t("vacancies_title")}</h3>
-          <button className="save-btn" onClick={() => openModal()}>
-            {t("add_company") || "Yangi qo‘shish"}
-          </button>
-        </div>
+    <div className="job_container">
 
-        <div className="vacancy-scroll">
-          {companies.map(company => {
-            const f = company.formData;
-            const rows = [
-              { title: "company_name", count: f.company_name || "-", phone: f.phone_number || "-" },
-              { title: "vacancy_position", count: f.vacant_jobs || "0", phone: "" },
-              { title: "monthly_salary", count: "1 000 000", phone: "" },
-              { title: "benefits", count: "transport_expenses_covered", phone: "" },
-            ];
 
-            return (
-              <div key={company.id} className="vacancy-box">
-                <table className="vacancy-table">
-                  <thead>
-                    <tr>
-                      <th>{t("table_company")}</th>
-                      <th>{t("table_count")}</th>
-                      <th>{t("table_phone")}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {rows.map((row, i) => (
-                      <tr key={i}>
-                        <td>{t(row.title)}</td>
-                        <td>{row.count}</td>
-                        <td>{row.phone || "-"}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-
-                <div className="table-actions">
-                  <TbEdit
-                    className="edit-btn"
-                    title={t("edit")}
-                    onClick={() => openModal(company)}
-                    style={{ cursor: "pointer" }}
-                  />
-                  <FiTrash2
-                    className="delete-btn"
-                    title={t("delete")}
-                    onClick={() => handleDelete(company.id)}
-                    style={{ cursor: "pointer" }}
-                  />
-                </div>
-              </div>
-            );
-          })}
-
-          <div className="table-pagination">
-            <span>{t("pagination_info")}</span>
-            <div className="pagination-controls">
-              <button aria-label={t("prev_page")}>{"<"}</button>
-              <button aria-label={t("next_page")}>{">"}</button>
-            </div>
-          </div>
+      <h2 className="job_title">Мавжуд иш ўринлари</h2>
+      <div className="plus">
+        <div className="job_plus_i" onClick={handleAddNew}>
+          +
         </div>
       </div>
 
-      {/* === MODAL (ProfileForm ichida) === */}
-      {modalIsOpen && (
-        <div className="modal-overlay" onClick={closeModal}>
-          <div className="modal-content" onClick={e => e.stopPropagation()}>
-            <div className="modal-header">
-              <h3>{editingId ? t("edit_data") : t("add_company")}</h3>
-              <FiX className="modal-close" onClick={closeModal} style={{ cursor: "pointer", fontSize: "24px" }} />
-            </div>
+      {data.map((item) => (
+        <div
+          className="job_table_block"
+          key={item.id}
+          onDoubleClick={() => handleDoubleClick(item)}
+        >
+          <table className="job_table">
+            <thead>
+              <tr>
+                <th>МЧЖ номи</th>
+                <th>Сони</th>
+                <th>
+                  <div className="job_tel">
+                    <p>Тел</p>
+                    <div className="job_icons">
+                      <FiEdit
+                        className="job_icon edit"
+                        onClick={() => handleEdit(item)}
+                      />
+                      <FiTrash
+                        className="job_icon delete"
+                        onClick={() => handleDelete(item.id)}
+                      />
+                    </div>
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{item.name}</td>
+                <td>{item.count}</td>
+                <td>{item.phone}</td>
+              </tr>
+              <tr>
+                <td>{item.work}</td>
+                <td>{item.quantity}</td>
+                <td className="job_icons"></td>
+              </tr>
+              <tr>
+                <td>Ойлик иш ҳақи</td>
+                <td>{item.salary}</td>
+                <td className="job_icons"></td>
+              </tr>
+              <tr>
+                <td>Қулайликлар</td>
+                <td></td>
+                <td>{item.conditions}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      ))}
 
-            {/* FOTO */}
-            <div className="photo-section">
-              <div className="photo-box" onClick={handleImageClick} style={{ cursor: "pointer" }}>
-                {modalImagePreview ? (
-                  <img src={modalImagePreview} alt="Preview" className="preview-image" />
-                ) : (
-                  <>
-                    <FiUploadCloud className="upload-icon" />
-                    <p className="upload-text">
-                      {t("upload_click_text")?.split("<br />").map((line, i) => (
-                        <React.Fragment key={i}>{line}{i < t("upload_click_text").split("<br />").length - 1 && <br />}</React.Fragment>
-                      ))}
-                    </p>
-                    <span className="upload-types">{t("upload_types")}</span>
-                  </>
-                )}
+      <div className="job_pagination">1–{data.length} of {data.length}</div>
+
+      {/* Auth Modal */}
+      {showAuthModal && (
+        <div className="job_modal_overlay" onClick={() => setShowAuthModal(false)}>
+          <div className="job_modal_content-a" onClick={(e) => e.stopPropagation()}>
+            <FiX className="job_modal_close" onClick={() => setShowAuthModal(false)} />
+            <h2 className="job_modal_title">Admin Panel</h2>
+            <div>
+              <div className="job_form_group">
+                <label className="job_form_label">Email:</label>
                 <input
-                  type="file"
-                  ref={fileInputRef}
-                  style={{ display: "none" }}
-                  accept="image/*"
-                  onChange={handleImageChange}
+                  type="email"
+                  className="job_form_input"
+                  value={authData.email}
+                  onChange={(e) => setAuthData({ ...authData, email: e.target.value })}
+                  placeholder="Email:Kiriting"
                 />
-                <button type="button" className="upload-btn" onClick={e => { e.stopPropagation(); handleImageClick(); }}>
-                  {t("upload_button")}
-                </button>
               </div>
-            </div>
-
-            {/* FORMA */}
-            <div className="form-section" style={{ maxHeight: "60vh", overflowY: "auto", padding: "0 10px" }}>
-              <h4>{t("general_info")}</h4>
-              <div className="form-grid">
-                {Object.keys(modalFormData).map(key => (
-                  <div className="form-item" key={key}>
-                    <label>{t(key)}</label>
-                    <input
-                      type="text"
-                      name={key}
-                      placeholder={t(`${key}_ph`) || ""}
-                      value={modalFormData[key]}
-                      onChange={handleInputChange}
-                    />
-                  </div>
-                ))}
+              <div className="job_form_group">
+                <label className="job_form_label">Password:</label>
+                <input
+                  type="password"
+                  className="job_form_input"
+                  value={authData.password}
+                  onChange={(e) => setAuthData({ ...authData, password: e.target.value })}
+                  placeholder="Parol:Kiriting"
+                  onKeyDown={(e) => e.key === "Enter" && handleAuthSubmit()}
+                />
               </div>
-
-              {/* Pastdagi bloklar */}
-              <div className="form-section-bottom">
-                <div className="bottom-box">
-                  <h4>{t("production_capacity")}</h4>
-                  <div className="double-inputs">
-                    <div><label>{t("plan")}</label><input name="production_plan" value={modalFormData.production_plan} onChange={handleInputChange} placeholder={t("plan_ph")} /></div>
-                    <div><label>{t("actual")}</label><input name="production_actual" value={modalFormData.production_actual} onChange={handleInputChange} placeholder={t("actual_ph")} /></div>
-                  </div>
-                </div>
-
-                <div className="bottom-box">
-                  <h4>{t("total_project_cost")}</h4>
-                  <div className="quad-inputs">
-                    <input name="own_funds" value={modalFormData.own_funds} onChange={handleInputChange} placeholder={t("own_funds_ph")} />
-                    <input name="bank_loan" value={modalFormData.bank_loan} onChange={handleInputChange} placeholder={t("bank_loan_ph")} />
-                    <input name="foreign_funds" value={modalFormData.foreign_funds} onChange={handleInputChange} placeholder={t("foreign_funds_ph")} />
-                  </div>
-                </div>
-
-                <div className="bottom-box">
-                  <h4>{t("export_value")}</h4>
-                  <div className="double-inputs">
-                    <div><label>{t("plan")}</label><input name="export_plan" value={modalFormData.export_plan} onChange={handleInputChange} placeholder={t("plan_ph")} /></div>
-                    <div><label>{t("actual")}</label><input name="export_actual" value={modalFormData.export_actual} onChange={handleInputChange} placeholder={t("actual_ph")} /></div>
-                  </div>
-                </div>
-
-                <div className="bottom-box">
-                  <h4>{t("allocated_funds")}</h4>
-                  <div className="double-inputs">
-                    <div><label>{t("plan")}</label><input name="allocated_plan" value={modalFormData.allocated_plan} onChange={handleInputChange} placeholder={t("plan_ph")} /></div>
-                    <div><label>{t("actual")}</label><input name="allocated_actual" value={modalFormData.allocated_actual} onChange={handleInputChange} placeholder={t("actual_ph")} /></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* TUGMALAR */}
-            <div className="modal-buttons" style={{ display: "flex", justifyContent: "flex-end", gap: "10px", marginTop: "20px" }}>
-              <button className="edit1-btn" onClick={closeModal} style={{ background: "#ddd" }}>
-                {t("cancel") || "Bekor qilish"}
-              </button>
-              <button className="save-btn" onClick={handleSave}>
-                {t("save_data") || "Saqlash"}
+              {authError && <div className="job_error">{authError}</div>}
+              <button type="button" className="job_submit_btn" onClick={handleAuthSubmit}>
+                Kirish
               </button>
             </div>
           </div>
         </div>
       )}
-    </>
+
+      {/* Edit Modal */}
+      {showEditModal && editingItem && (
+        <div className="job_modal_overlay" onClick={() => setShowEditModal(false)}>
+          <div className="job_modal_content" onClick={(e) => e.stopPropagation()}>
+            <FiX className="job_modal_close" onClick={() => setShowEditModal(false)} />
+            <h2 className="job_modal_title">Маълумотни ўзгартириш</h2>
+            <div>
+              <div className="job_form_group">
+                <label className="job_form_label">МЧЖ номи:</label>
+                <input
+                  type="text"
+                  className="job_form_input"
+                  value={editingItem.name}
+                  onChange={(e) => setEditingItem({ ...editingItem, name: e.target.value })}
+                />
+              </div>
+              <div className="job_form_group">
+                <label className="job_form_label">Сони:</label>
+                <input
+                  type="text"
+                  className="job_form_input"
+                  value={editingItem.count}
+                  onChange={(e) => setEditingItem({ ...editingItem, count: e.target.value })}
+                />
+              </div>
+              <div className="job_form_group">
+                <label className="job_form_label">Телефон:</label>
+                <input
+                  type="text"
+                  className="job_form_input"
+                  value={editingItem.phone}
+                  onChange={(e) => setEditingItem({ ...editingItem, phone: e.target.value })}
+                />
+              </div>
+              <div className="job_form_group">
+                <label className="job_form_label">Иш тури:</label>
+                <input
+                  type="text"
+                  className="job_form_input"
+                  value={editingItem.work}
+                  onChange={(e) => setEditingItem({ ...editingItem, work: e.target.value })}
+                />
+              </div>
+              <div className="job_form_group">
+                <label className="job_form_label">Миқдори:</label>
+                <input
+                  type="text"
+                  className="job_form_input"
+                  value={editingItem.quantity}
+                  onChange={(e) => setEditingItem({ ...editingItem, quantity: e.target.value })}
+                />
+              </div>
+              <div className="job_form_group">
+                <label className="job_form_label">Ойлик иш ҳақи:</label>
+                <input
+                  type="text"
+                  className="job_form_input"
+                  value={editingItem.salary}
+                  onChange={(e) => setEditingItem({ ...editingItem, salary: e.target.value })}
+                />
+              </div>
+              <div className="job_form_group">
+                <label className="job_form_label">Қулайликлар:</label>
+                <input
+                  type="text"
+                  className="job_form_input"
+                  value={editingItem.conditions}
+                  onChange={(e) => setEditingItem({ ...editingItem, conditions: e.target.value })}
+                />
+              </div>
+              <button type="button" className="job_submit_btn" onClick={handleEditSubmit}>
+                Сақлаш
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
   );
-};
+}
 
 export default VacanciesTable;

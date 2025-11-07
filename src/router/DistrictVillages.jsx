@@ -1,22 +1,31 @@
-// pages/Result.jsx
+// src/pages/DistrictVillages.jsx
 import React, { useState, useEffect } from "react";
-import "../router/Page.css";
+import axios from "axios";
+import { useParams, Link } from "react-router-dom";
+import "./Page.css";
+import { useLanguage } from "../context/LanguageContext";
+import DefoultImg from "../assets/rayon__img.png";
+// import Result from "../components/Result";
+import Statistika from "../components/Statistika";
 import result_icon_1 from "../assets/Frame.png";
 import result_icon_2 from "../assets/Frame (1).png";
-import { useLanguage } from "../context/LanguageContext";
-import { Link } from "react-router-dom";
-import api from "../axios";
 
-function Result() {
+const DistrictVillages = () => {
+  const { district: urlDistrict } = useParams();               // /district/namangan-sh
+  const district = urlDistrict?.trim();                        // "namangan-sh"
+
+  const [qishloqlar, setQishloqlar] = useState([]);
+  const [districtData, setDistrictData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const { t } = useLanguage();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [formData, setFormData] = useState({ username: "", email: "", password: "" });
+  const [formData, setFormData] = useState({ email: "", password: "" });
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [sections, setSections] = useState([]);
-  const [loading, setLoading] = useState(true);
 
   // Section tartibini belgilash uchun funksiya
   const getSectionOrder = (title) => {
@@ -39,6 +48,32 @@ function Result() {
   };
 
   useEffect(() => {
+    const fetchQishloqlar = async () => {
+      if (!district) return;
+      try {
+        setLoading(true);
+        setError(null);
+        console.log("Frontend so‘rovi →", district);
+
+        const res = await axios.get(
+          `https://namangan-back-api.onrender.com/api/unicorns/district/${district}/locations`
+        );
+
+        console.log("Backend javobi →", res.data);
+        setQishloqlar(res.data || []);
+        setDistrictData({ district: urlDistrict, totalQishloq: (res.data || []).length });
+      } catch (err) {
+        console.error("Xato:", err.response?.data || err.message);
+        setError(err.response?.data?.message || "Ma'lumot olishda xato");
+        if (err.response?.status === 404) setQishloqlar([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchQishloqlar();
+  }, [district]);
+
+  useEffect(() => {
     const saved = localStorage.getItem("userCredentials");
     if (saved) {
       const { email, password } = JSON.parse(saved);
@@ -48,12 +83,14 @@ function Result() {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const res = await api.get("/results/summary");
-        const apiData = res.data[0];
+        const res = await axios.get("https://namangan-back-api.onrender.com/api/results/district/Namangan");
+        const apiData = res.data;
+        console.log(apiData);
+        
 
-        const plan = Number(apiData.totalPlan) || 0;
-        const actual = Number(apiData.totalActual) || 0;
-        const village = Number(apiData.villageCount) || 0;
+        const plan = Number(apiData.totalPlan);
+        const actual = Number(apiData.totalActual);
+        const village = Number(apiData.villageCount);
 
         // Ma'lumotlarni tartibli qilish
         const newSections = (apiData.titles || []).map(title => {
@@ -84,6 +121,11 @@ function Result() {
     fetchData();
   }, []);
 
+  /* UI qismi o‘zgarishsiz – faqat “district” o‘rniga “urlDistrict” ko‘rsatiladi */
+  if (loading) return <div className="container" style={{ textAlign: "center", padding: "40px" }}><p>Yuklanmoqda...</p></div>;
+  if (error) return <div className="container" style={{ textAlign: "center", padding: "40px" }}><p>Xato: {error}</p><Link to="/unicorn">← Orqaga</Link></div>;
+  if (qishloqlar.length === 0) return <div className="container" style={{ textAlign: "center", padding: "40px" }}><p>{urlDistrict} tumani uchun qishloq topilmadi</p><Link to="/unicorn">← Orqaga</Link></div>;
+
   const handleInputChange = e => {
     const { name, value } = e.target;
     setFormData(p => ({ ...p, [name]: value }));
@@ -105,7 +147,7 @@ function Result() {
 
     setTimeout(() => {
       setIsModalOpen(false);
-      setFormData({ username: "", email: "", password: "" });
+      setFormData({ email: "", password: "" });
       setMessage(""); setIsSubmitting(false);
     }, 2000);
   };
@@ -135,9 +177,10 @@ function Result() {
       </div>
     );
   };
-
   return (
     <div className="container">
+      {/* <Result data={districtData} type="district" /> */}
+      <div className="container">
       <div className="result">
         <div className="result_top">
           <h1 className="result_top_h1">{t("result_title")}</h1>
@@ -187,8 +230,8 @@ function Result() {
                   {t(section.title)}
                 </p>
                 <div className="result_cards">
-                  <ProgressCircle value={section.plan} total={section.total} label="plan" color={section.color} />
-                  <ProgressCircle value={section.actual} total={section.total} label="actual" color={section.color} />
+                  <ProgressCircle value={section.totalPlan} total={section.total} label="plan" color={section.color} />
+                  <ProgressCircle value={section.totalActual} total={section.total} label="actual" color={section.color} />
                 </div>
               </div>
             ))
@@ -247,7 +290,53 @@ function Result() {
         </div>
       )}
     </div>
-  );
-}
 
-export default Result;
+      <Statistika data={districtData} />
+
+      <div className="swiper_all">
+        <div className="header-flex" style={{ marginBottom: "20px" }}>
+          <h1 className="swiper_h1">{urlDistrict} tumani qishloqlari ({qishloqlar.length} ta)</h1>
+          <Link to="/" className="back-link">← Orqaga</Link>
+        </div>
+
+        <div className="swiper">
+          {qishloqlar.map((q) => (
+            <Link key={q._id} to={`/unicpage/${encodeURIComponent(q._id)}`} className="link">
+              <div className="swiper_slide">
+                <div className="swiper_hr"></div>
+                <div className="swiper_flex unicorn_slide">
+                  <div className="swiper_text">
+                    <h2>{q._id}</h2>
+                    <h6>{q.firstDesc || "Izoh yo'q"}</h6>
+                    <p>{q.totalCount} ta MChJ</p>
+                    <small>
+                      {new Date().toLocaleDateString("uz-UZ", {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </small>
+                  </div>
+
+                  <div className="swiper_edit">
+                    <div className="swiper_edit-img">
+                      <img
+                        src={q.firstImage || DefoultImg}
+                        alt={q._id}
+                        style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "8px" }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default DistrictVillages;
