@@ -1,4 +1,3 @@
-// pages/Result.jsx
 import React, { useState, useEffect } from "react";
 import "../router/Page.css";
 import result_icon_1 from "../assets/Frame.png";
@@ -48,26 +47,36 @@ function Result() {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const res = await api.get("/results/summary");
-        const apiData = res.data[0];
+        const res = await api.get("/statistics/global/");   // endpoint to'g'ri
+        const data = res.data;  // endi bitta obyekt
 
-        const plan = Number(apiData.totalPlan) || 0;
-        const actual = Number(apiData.totalActual) || 0;
-        const village = Number(apiData.villageCount) || 0;
-
-        // Ma'lumotlarni tartibli qilish
-        const newSections = (apiData.titles || []).map(title => {
-          const isWorkplaces = title === "workplaces";
-
-          return {
-            title,
-            plan: isWorkplaces ? village : plan,
-            actual: isWorkplaces ? village : actual,
-            total: isWorkplaces ? (village || 1) : plan,
-            color: getSectionColor(title),
-            order: getSectionOrder(title),
-          };
-        });
+        // 3 ta bo'lim: Ish o'rinlari, Eksport, Ishlab chiqarish
+        const newSections = [
+          {
+            title: "workplaces",           // Ish o'rinlari
+            plan: data.ish_urni_planned,
+            actual: data.ish_urni_real,
+            total: data.ish_urni_planned || 1,
+            color: getSectionColor("workplaces"),
+            order: getSectionOrder("workplaces"),
+          },
+          {
+            title: "export",               // Eksport
+            plan: data.export_volume_planned,
+            actual: data.export_volume_real,
+            total: data.export_volume_planned || 1,
+            color: getSectionColor("export"),
+            order: getSectionOrder("export"),
+          },
+          {
+            title: "production",           // Ishlab chiqarish
+            plan: data.current_volume_per_year_planned,
+            actual: data.current_volume_per_year_real,
+            total: data.current_volume_per_year_planned || 1,
+            color: getSectionColor("production"),
+            order: getSectionOrder("production"),
+          },
+        ];
 
         // Tartib bo'yicha saralash
         newSections.sort((a, b) => a.order - b.order);
@@ -110,28 +119,70 @@ function Result() {
     }, 2000);
   };
 
+  // Sonni qisqartirish funksiyasi
+  const formatNumber = (num) => {
+    if (!num) return "0";
+
+    const absNum = Math.abs(num);
+    if (absNum >= 1_000_000_000) {
+      return (num / 1_000_000_000).toFixed(1).replace(/\.0$/, "");
+    }
+    if (absNum >= 1_000_000) {
+      return (num / 1_000_000).toFixed(1).replace(/\.0$/, "");
+    }
+    if (absNum >= 1_000) {
+      return (num / 1_000).toFixed(1).replace(/\.0$/, "");
+    }
+    return num.toLocaleString();
+  };
+
   const ProgressCircle = ({ value, total, label, color }) => {
     const pct = total === 0 ? 0 : (value / total) * 100;
     const r = 45;
     const c = 2 * Math.PI * r;
     const offset = c - (pct / 100) * c;
 
+    // formatNumber funksiyasidan foydalanamiz
+    const formatted = formatNumber(value);
+    const [mainValue] = formatted.includes(" ")
+      ? formatted.split(" ")
+      : [formatted, ""];
+
     return (
       <div className="result_card">
         <svg width="110" height="110" viewBox="0 0 110 110">
           <circle cx="55" cy="55" r={r} stroke="#E0E0E0" strokeWidth="4" fill="none" />
           <circle
-            cx="55" cy="55" r={r}
-            stroke={color} strokeWidth="4" fill="none"
-            strokeDasharray={c} strokeDashoffset={offset}
+            cx="55"
+            cy="55"
+            r={r}
+            stroke={color}
+            strokeWidth="4"
+            fill="none"
+            strokeDasharray={c}
+            strokeDashoffset={offset}
             strokeLinecap="round"
-            style={{ transition: "stroke-dashoffset .5s ease", transform: "rotate(-90deg)", transformOrigin: "50% 50%" }}
+            style={{
+              transition: "stroke-dashoffset .5s ease",
+              transform: "rotate(-90deg)",
+              transformOrigin: "50% 50%",
+            }}
           />
-          <text x="55" y="55" textAnchor="middle" dominantBaseline="middle" fontSize="20" fontWeight="700" fill={color}>
-            {value.toLocaleString()}
+
+          {/* ASOSIY SON – markazda */}
+          <text
+            x="55"
+            y="55"
+            textAnchor="middle"
+            dominantBaseline="middle"
+            fontSize="16"
+            fontWeight="700"
+            fill={color}
+          >
+            {mainValue}
           </text>
         </svg>
-        <span>{t(label)}</span>
+        <span style={{ marginTop: "8px", fontSize: "14px" }}>{t(label)}</span>
       </div>
     );
   };
@@ -142,16 +193,17 @@ function Result() {
         <div className="result_top">
           <h1 className="result_top_h1">{t("result_title")}</h1>
           {isAdmin && (
-            <Link className="link" to="/add">
+            <Link className="link" to="/uniquedit">
               <button className="result_top_btn1">
                 <img src={result_icon_1} alt="Edit" />
                 {t("edit_data")}
               </button>
             </Link>
           )}
-          <button className="result_top_btn2" onClick={() => setIsModalOpen(true)}>
-            <img src={result_icon_2} alt="Settings" />
-          </button>
+          {!isAdmin &&
+            <button className="result_top_btn2" onClick={() => setIsModalOpen(true)}>
+              <img src={result_icon_2} alt="Settings" />
+            </button>}
         </div>
 
         <div className="result_bottom">

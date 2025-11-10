@@ -33,7 +33,7 @@ const ProfileForm = () => {
       console.error("Ma'lumot olishda xato:", err);
     }
   };
-const { t } = useLanguage();
+  const { t } = useLanguage();
 
   useEffect(() => {
     fetchData();
@@ -77,60 +77,60 @@ const { t } = useLanguage();
     }
   };
 
-// handleSave — XATOSIZ + DARHOL REFRESH
-const handleSave = async () => {
-  if (!title.trim() || !desc.trim()) {
-    alert("Iltimos, nomi va izohni to'ldiring!");
-    return;
-  }
+  // handleSave — XATOSIZ + DARHOL REFRESH
+  const handleSave = async () => {
+    if (!title.trim() || !desc.trim()) {
+      alert("Iltimos, nomi va izohni to'ldiring!");
+      return;
+    }
 
-  const data = {
-    title,
-    desc,
-    image: imagePreview || "",
+    const data = {
+      title,
+      desc,
+      image: imagePreview || "",
+    };
+
+    try {
+      if (isEdit) {
+        await axios.put(`https://namangan-back-api.onrender.com/api/unicorns/${currentId}`, data);
+        alert("✅ Muvaffaqiyatli yangilandi!");
+      } else {
+        await axios.post("https://namangan-back-api.onrender.com/api/unicorns", data);
+        alert("✅ Yangi kompaniya qo'shildi!");
+      }
+
+      // Darhol yangilash
+      window.location.reload();
+    } catch (err) {
+      console.error("Xato tafsiloti:", err);
+
+      if (err.code === "ERR_NETWORK") {
+        alert("❌ Server ishlamayapti. Backendni yoqing!");
+      } else if (err.response?.status === 404) {
+        alert("❌ Yo'q element! ID noto'g'ri.");
+      } else if (err.response?.status === 500) {
+        alert("❌ Server xatosi. Backend loglarni tekshiring.");
+      } else {
+        alert("❌ Rasmni xajmi juda katta xajmi kichik rasm kiriting");
+
+      }
+    }
   };
 
-  try {
-    if (isEdit) {
-      await axios.put(`https://namangan-back-api.onrender.com/api/unicorns/${currentId}`, data);
-      alert("✅ Muvaffaqiyatli yangilandi!");
-    } else {
-      await axios.post("https://namangan-back-api.onrender.com/api/unicorns", data);
-      alert("✅ Yangi kompaniya qo'shildi!");
+  // O‘CHIRISH
+  // handleDelete — XATOSIZ
+  const handleDelete = async (id) => {
+    if (!window.confirm("❌ Rostan o‘chirasizmi?")) return;
+
+    try {
+      await axios.delete(`https://namangan-back-api.onrender.com/api/unicorns/${id}`);
+      alert("✅ Muvaffaqiyatli o‘chirildi!");
+      window.location.reload();
+    } catch (err) {
+      console.error("O‘chirish xatosi:", err);
+      alert("❌ O‘chirib bo‘lmadi. Serverni tekshiring.");
     }
-
-    // Darhol yangilash
-    window.location.reload();
-  } catch (err) {
-    console.error("Xato tafsiloti:", err);
-
-    if (err.code === "ERR_NETWORK") {
-      alert("❌ Server ishlamayapti. Backendni yoqing!");
-    } else if (err.response?.status === 404) {
-      alert("❌ Yo'q element! ID noto'g'ri.");
-    } else if (err.response?.status === 500) {
-      alert("❌ Server xatosi. Backend loglarni tekshiring.");
-    } else {
-      alert("❌ Rasmni xajmi juda katta xajmi kichik rasm kiriting");
-
-    }
-  }
-};
-
-// O‘CHIRISH
-// handleDelete — XATOSIZ
-const handleDelete = async (id) => {
-  if (!window.confirm("❌ Rostan o‘chirasizmi?")) return;
-
-  try {
-    await axios.delete(`https://namangan-back-api.onrender.com/api/unicorns/${id}`);
-    alert("✅ Muvaffaqiyatli o‘chirildi!");
-    window.location.reload();
-  } catch (err) {
-    console.error("O‘chirish xatosi:", err);
-    alert("❌ O‘chirib bo‘lmadi. Serverni tekshiring.");
-  }
-};
+  };
 
   return (
     <div className="container">
@@ -138,7 +138,7 @@ const handleDelete = async (id) => {
       <div className="swiper_all">
         <div className="header-flex" style={{ marginBottom: "20px" }}>
           <h1 className="swiper_h1">{t("rayonlar_add")}</h1>
-         <button onClick={() => openModal()} className="save-btn">
+          <button onClick={() => openModal()} className="save-btn">
             + {t("yangi_qoshish_btn_add")}
           </button>
         </div>
@@ -176,7 +176,7 @@ const handleDelete = async (id) => {
 
                     <div className="swiper_actions" style={{ marginTop: "10px", display: "flex", gap: "10px" }}>
                       <button onClick={() => openModal(item)} className="edit-btn">
-                        <FiEdit className='btn_f_edit' style={{cursor:"pointer"}}/>
+                        <FiEdit className='btn_f_edit' style={{ cursor: "pointer" }} />
                       </button>
                       <RiDeleteBin6Line
                         onClick={() => handleDelete(item._id)}
@@ -189,7 +189,7 @@ const handleDelete = async (id) => {
             ))
           ) : (
             <div style={{ textAlign: "center", padding: "40px" }}>
-                <p>{t("qidirilmoqda_add")}</p>
+              <p>{t("qidirilmoqda_add")}</p>
             </div>
           )}
         </div>
@@ -208,24 +208,24 @@ const handleDelete = async (id) => {
               <div className="photo-section">
                 <div className="form_photo">
 
-                <div className="photo-box" onClick={handleImageClick}>
-                  {imagePreview ? (
-                    <img src={imagePreview} alt="Preview" className="preview-image" />
-                  ) : (
-                    <>
-                      <FiUploadCloud className="upload-icon" />
-                      <p className="upload-text">Rasm yuklash uchun bosing</p>
-                      <span className="upload-types">JPG, PNG</span>
-                    </>
-                  )}
-                  <input
-                    type="file"
-                    ref={fileInputRef}
-                    style={{ display: "none" }}
-                    accept="image/*"
-                    onChange={handleImageChange}
+                  <div className="photo-box" onClick={handleImageClick}>
+                    {imagePreview ? (
+                      <img src={imagePreview} alt="Preview" className="preview-image" />
+                    ) : (
+                      <>
+                        <FiUploadCloud className="upload-icon" />
+                        <p className="upload-text">Rasm yuklash uchun bosing</p>
+                        <span className="upload-types">JPG, PNG</span>
+                      </>
+                    )}
+                    <input
+                      type="file"
+                      ref={fileInputRef}
+                      style={{ display: "none" }}
+                      accept="image/*"
+                      onChange={handleImageChange}
                     />
-                </div>
+                  </div>
                   <button
                     type="button"
                     className="upload-btn"
@@ -233,10 +233,10 @@ const handleDelete = async (id) => {
                       e.stopPropagation();
                       handleImageClick();
                     }}
-                    >
+                  >
                     Rasm tanlash
                   </button>
-                    </div>
+                </div>
               </div>
 
               <div className="form-section">

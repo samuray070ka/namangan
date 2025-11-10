@@ -6,11 +6,14 @@ import Navbar from './components/Navbar';
 import ArticlePage from './router/ArticlePage';
 import Home from './router/Home';
 import { Routes, Route } from "react-router-dom";
-import ProfileForm from './router/ProfileForm';
+// import ProfileForm from './router/ProfileForm';
 import VacanciesTable from "./router/VacanciesTable";
 import DistrictVillages from './router/DistrictVillages'; // Tumanlar ro'yxati
 import UnicPage from './router/UnicPage'; // Qishloq ichi MChJ
 import Contact from './router/Contact';
+import UniqueEdit from './router/UniqueEdit';
+import FormData from './router/FormData'
+import UniquePush from './router/UniquePush';
 
 function App() {
   return (
@@ -20,11 +23,15 @@ function App() {
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/about' element={<ArticlePage />} />
-          <Route path='/add' element={<ProfileForm />} />
+          <Route path='/formData' element={<FormData />} />
+          <Route path='/uniquedit' element={<UniqueEdit />} />
+          <Route path='/uniquedit/:id' element={<UniqueEdit />} />
+          <Route path='/uniquepush' element={<UniquePush />} />
+
           <Route path='/edit' element={<VacanciesTable />} />
           <Route path='/contact' element={<Contact />} />
           <Route path='/district/:district' element={<DistrictVillages />} /> {/* Tuman -> qishloqlar */}
-          <Route path='/unicpage/:location' element={<UnicPage />} /> {/* Qishloq -> MChJ */}
+          <Route path="/unicpage/:location" element={<UnicPage />} /> {/* Qishloq -> MChJ */}
         </Routes>
         <Footer />
       </div>
